@@ -10,7 +10,7 @@
                 Console.Write("Please enter the path of the file or folder to be analyzed: ");
                 path = Console.ReadLine();
 
-                if (File.Exists(path) || Directory.Exists(path))
+                if (System.IO.File.Exists(path) || Directory.Exists(path))
                 {
                     break;
                 }
@@ -39,14 +39,14 @@
             }
         }
 
-        public static void ShowFileAnalysis(string fileName, int spaceCount, int tabCount, bool hasMixedSpacesAndTabs, int trailingWhitespaceCount, bool hasFinalEmptyLine)
+        public static void ShowFileAnalysis(File file)
         {
-            Console.WriteLine($"File: {fileName}");
-            Console.WriteLine($"Spaces: {spaceCount}");
-            Console.WriteLine($"Tabs: {tabCount}");
-            Console.WriteLine($"Has mixed spaces and tabs: {hasMixedSpacesAndTabs}");
-            Console.WriteLine($"Trailing whitespaces: {trailingWhitespaceCount}");
-            Console.WriteLine($"Has final empty line: {hasFinalEmptyLine}");
+            Console.WriteLine($"File: {file.Name}");
+            Console.WriteLine($"Spaces: {file.SpaceCount}");
+            Console.WriteLine($"Tabs: {file.TabCount}");
+            Console.WriteLine($"Has mixed spaces and tabs: {file.HasMixedSpaceAndTab}");
+            Console.WriteLine($"Trailing whitespaces: {file.TrailingWhitespaceCount}");
+            Console.WriteLine($"Has final empty line: {file.HasFinalEmptyLine}");
         }
     }
 }
