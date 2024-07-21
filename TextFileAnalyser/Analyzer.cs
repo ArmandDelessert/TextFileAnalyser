@@ -9,7 +9,7 @@
 
             Console.WriteLine($"Analyzing '{path}'...");
 
-            if (File.Exists(path))
+            if (System.IO.File.Exists(path))
             {
                 AnalyzeFile(path);
             }
@@ -23,68 +23,97 @@
             }
         }
 
-        private void TraverseDirectory(string directoryPath)
+        private FileSystemContainer TraverseDirectory(string directoryPath)
         {
             if (!Directory.Exists(directoryPath))
                 throw new DirectoryNotFoundException("The specified directory does not exist.");
 
+            FileSystemContainer fileSystemContainer = new(directoryPath);
+
             foreach (var file in Directory.GetFiles(directoryPath))
             {
-                AnalyzeFile(file);
+                fileSystemContainer.Add(AnalyzeFile(file));
             }
 
-            foreach (var dir in Directory.GetDirectories(directoryPath))
+            foreach (var directory in Directory.GetDirectories(directoryPath))
             {
-                TraverseDirectory(dir);
+                fileSystemContainer.Add(TraverseDirectory(directory));
+            }
+
+            return fileSystemContainer;
+        }
+
+        // TODO ADT : Supprimer cette méthode.
+        private void AnalyzeTextFileList(string[] filePaths)
+        {
+            int totalFiles = filePaths.Length;
+            int textFiles = 0;
+            Dictionary<string, int> extensionCountDictionary = [];
+            Dictionary<string, int> encodingCountDictionary = [];
+
+            foreach (var file in filePaths)
+            {
+                //AnalyzeFile(file);
+
+                if (FileUtilities.IsTextFile(file))
+                {
+                    ++textFiles;
+
+                    string extension = Path.GetExtension(file);
+                    if (extensionCountDictionary.TryGetValue(extension, out int extensionCount))
+                        extensionCountDictionary[extension] = ++extensionCount;
+                    else
+                        extensionCountDictionary[extension] = 1;
+
+                    var encoding = FileUtilities.GetFileEncoding(file);
+                    string encodingName = encoding.EncodingName;
+                    if (encodingCountDictionary.TryGetValue(encodingName, out int encodingCount))
+                        encodingCountDictionary[encodingName] = ++encodingCount;
+                    else
+                        encodingCountDictionary[encodingName] = 1;
+
+                    AnalyzeTextFile(file);
+                }
             }
         }
 
-        private void AnalyzeFile(string filePath)
+        private File AnalyzeFile(string filePath)
         {
             if (FileUtilities.IsTextFile(filePath))
             {
-                AnalyzeTextFile(filePath);
+                return AnalyzeTextFile(filePath);
             }
             else
             {
                 Console.WriteLine($"Skipping non-text file: {filePath}");
+                return new File(filePath);
             }
         }
 
-        private void AnalyzeTextFile(string filePath)
+        private File AnalyzeTextFile(string filePath)
         {
-            if (!File.Exists(filePath))
+            if (!System.IO.File.Exists(filePath))
                 throw new FileNotFoundException("The specified file does not exist.");
 
-            var fileInfo = new FileInfo(filePath);
-            int spaceCount = 0;
-            int tabCount = 0;
-            int trailingWhitespaceCount = 0;
-            bool hasFinalEmptyLine = false;
-            bool hasMixedSpacesAndTabs = false;
+            var file = new File(filePath);
 
             using (var reader = new StreamReader(filePath))
             {
                 string? line;
                 while ((line = reader.ReadLine()) != null)
                 {
-                    spaceCount += line.Count(c => c == ' ');
-                    tabCount += line.Count(c => c == '\t');
+                    file.SpaceCount += line.Count(c => c == ' ');
+                    file.TabCount += line.Count(c => c == '\t');
                     if (line.EndsWith(' '))
                     {
-                        ++trailingWhitespaceCount;
-                    }
-
-                    if (line.Contains(' ') && line.Contains('\t'))
-                    {
-                        hasMixedSpacesAndTabs = true;
+                        ++file.TrailingWhitespaceCount;
                     }
                 }
 
-                hasFinalEmptyLine = string.IsNullOrEmpty(line);
+                file.HasFinalEmptyLine = string.IsNullOrEmpty(line);
             }
 
-            UserInterface.ShowFileAnalysis(fileInfo.Name, spaceCount, tabCount, hasMixedSpacesAndTabs, trailingWhitespaceCount, hasFinalEmptyLine);
+            return file;
         }
     }
 }
