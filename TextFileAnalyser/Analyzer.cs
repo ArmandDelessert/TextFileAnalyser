@@ -102,9 +102,9 @@
                 string? line;
                 while ((line = reader.ReadLine()) != null)
                 {
-                    file.SpaceCount += line.Count(c => c == ' ');
+                    file.DoubleSpaceCount += line.Count(c => c == ' '); // TODO ADT : Compter les doubles espaces seulement.
                     file.TabCount += line.Count(c => c == '\t');
-                    if (line.EndsWith(' '))
+                    if (line.EndsWith(' ') || line.EndsWith('\t'))
                     {
                         ++file.TrailingWhitespaceCount;
                     }

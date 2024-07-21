@@ -42,7 +42,7 @@
         public static void ShowFileAnalysis(File file)
         {
             Console.WriteLine($"File: {file.Name}");
-            Console.WriteLine($"Spaces: {file.SpaceCount}");
+            Console.WriteLine($"Double spaces: {file.DoubleSpaceCount}");
             Console.WriteLine($"Tabs: {file.TabCount}");
             Console.WriteLine($"Has mixed spaces and tabs: {file.HasMixedSpaceAndTab}");
             Console.WriteLine($"Trailing whitespaces: {file.TrailingWhitespaceCount}");
