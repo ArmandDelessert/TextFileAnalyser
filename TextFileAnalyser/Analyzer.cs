@@ -4,6 +4,9 @@
     {
         public void AnalyzePath(string path)
         {
+            if (!Path.Exists(path))
+                throw new ArgumentException("The specified path does not exist.", nameof(path));
+
             Console.WriteLine($"Analyzing '{path}'...");
 
             if (File.Exists(path))
@@ -12,7 +15,7 @@
             }
             else if (Directory.Exists(path))
             {
-                AnalyzeDirectory(path);
+                TraverseDirectory(path);
             }
             else
             {
@@ -20,55 +23,19 @@
             }
         }
 
-        private void AnalyzeDirectoryList(string[] directoryPaths)
-        {
-
-        }
-
-        private void AnalyzeDirectory(string directoryPath)
+        private void TraverseDirectory(string directoryPath)
         {
             if (!Directory.Exists(directoryPath))
                 throw new DirectoryNotFoundException("The specified directory does not exist.");
 
-            var files = Directory.GetFiles(directoryPath.Trim());
-            AnalyzeTextFileList(files);
-
-            var subDirectories = Directory.GetDirectories(directoryPath);
-            AnalyzeDirectoryList(subDirectories);
-
-            //UserInterface.ShowResults(totalFiles, textFiles, extensionCountDictionary, encodingCountDictionary);
-        }
-
-        private void AnalyzeTextFileList(string[] filePaths)
-        {
-            int totalFiles = filePaths.Length;
-            int textFiles = 0;
-            Dictionary<string, int> extensionCountDictionary = [];
-            Dictionary<string, int> encodingCountDictionary = [];
-
-            foreach (var file in filePaths)
+            foreach (var file in Directory.GetFiles(directoryPath))
             {
-                //AnalyzeFile(file);
+                AnalyzeFile(file);
+            }
 
-                if (FileUtilities.IsTextFile(file))
-                {
-                    ++textFiles;
-
-                    string extension = Path.GetExtension(file);
-                    if (extensionCountDictionary.TryGetValue(extension, out int extensionCount))
-                        extensionCountDictionary[extension] = ++extensionCount;
-                    else
-                        extensionCountDictionary[extension] = 1;
-
-                    var encoding = FileUtilities.GetFileEncoding(file);
-                    string encodingName = encoding.EncodingName;
-                    if (encodingCountDictionary.TryGetValue(encodingName, out int encodingCount))
-                        encodingCountDictionary[encodingName] = ++encodingCount;
-                    else
-                        encodingCountDictionary[encodingName] = 1;
-
-                    AnalyzeTextFile(file);
-                }
+            foreach (var dir in Directory.GetDirectories(directoryPath))
+            {
+                TraverseDirectory(dir);
             }
         }
 
