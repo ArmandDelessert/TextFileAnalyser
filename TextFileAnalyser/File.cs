@@ -12,9 +12,9 @@
             Path = Directory.GetParent(fullPath)?.FullName ?? string.Empty;
         }
 
-        public required string Name { get; set; }
-        public required string Extension { get; set; }
-        public required string Path { get; set; }
+        public string Name { get; set; }
+        public string Extension { get; set; }
+        public string Path { get; set; }
 
         public bool IsTextFile { get; set; }
         public int SpaceCount { get; set; }
