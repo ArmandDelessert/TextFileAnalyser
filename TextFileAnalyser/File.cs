@@ -16,8 +16,8 @@
         public string Extension { get; set; }
         public string Path { get; set; }
 
-        public byte[] Hash { get; }
-        public DateTime HashDate { get; set; }
+        public byte[] Hash /*{ get; private set; }*/ => throw new NotImplementedException();
+        public DateTime HashComputationDate /*{ get; private set; }*/ => throw new NotImplementedException();
         public bool IsTextFile { get; set; }
 
         public int DoubleSpaceCount { get; set; }
