@@ -7,25 +7,20 @@
             if (!Directory.Exists(fullPath))
                 throw new DirectoryNotFoundException("The specified directory does not exist.");
 
-            Name = System.IO.Path.GetDirectoryName(fullPath) ?? "[Root]";
-            Path = Directory.GetParent(fullPath)?.FullName ?? string.Empty;
+            FullPath = fullPath;
+            Name = Path.GetFileName(fullPath) ?? "[Root]";
 
             Files = [];
             FileSystemContainers = [];
         }
 
         public string Name { get; set; }
-
-        public string Path { get; set; }
-
-        public string FullPath => System.IO.Path.Combine(Path, Name);
+        public string FullPath { get; set; }
 
         public List<File> Files { get; }
-
         public List<FileSystemContainer> FileSystemContainers { get; }
 
         public void Add(File file) => Files.Add(file);
-
         public void Add(FileSystemContainer fileSystemContainer) => FileSystemContainers.Add(fileSystemContainer);
     }
 }

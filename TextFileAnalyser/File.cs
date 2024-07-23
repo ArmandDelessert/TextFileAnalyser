@@ -7,14 +7,19 @@
             if (!System.IO.File.Exists(fullPath))
                 throw new FileNotFoundException("The specified file does not exist.");
 
-            Name = System.IO.Path.GetDirectoryName(fullPath) ?? "[Root]";
-            Extension = System.IO.Path.GetExtension(fullPath) ?? string.Empty;
-            Path = Directory.GetParent(fullPath)?.FullName ?? string.Empty;
+            FullPath = fullPath;
+            Name = Path.GetFileName(fullPath) ?? "[Root]";
+            Extension = Path.GetExtension(fullPath) ?? string.Empty;
+        }
+
+        public File(string fullPath, bool isTextFile) : this(fullPath)
+        {
+            IsTextFile = isTextFile;
         }
 
         public string Name { get; set; }
         public string Extension { get; set; }
-        public string Path { get; set; }
+        public string FullPath { get; set; }
 
         public byte[] Hash /*{ get; private set; }*/ => throw new NotImplementedException();
         public DateTime HashComputationDate /*{ get; private set; }*/ => throw new NotImplementedException();
@@ -34,7 +39,7 @@
             || LfCount > 0 && CrLfCount > 0;
 
         public int TrailingWhitespaceCount { get; set; }
-        public bool HasFinalEmptyLine { get; set; }
+        public int FinalEmptyLineCount { get; set; }
 
         public void ComputeHash() { throw new NotImplementedException(); }
     }

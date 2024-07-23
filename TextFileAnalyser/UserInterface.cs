@@ -39,14 +39,44 @@
             }
         }
 
-        public static void ShowFileAnalysis(File file)
+        public static void ShowDirectoryAnalysis(FileSystemContainer fileSystemContainer)
         {
-            Console.WriteLine($"File: {file.Name}");
-            Console.WriteLine($"Double spaces: {file.DoubleSpaceCount}");
-            Console.WriteLine($"Tabs: {file.TabCount}");
-            Console.WriteLine($"Has mixed spaces and tabs: {file.HasMixedSpaceAndTab}");
-            Console.WriteLine($"Trailing whitespaces: {file.TrailingWhitespaceCount}");
-            Console.WriteLine($"Has final empty line: {file.HasFinalEmptyLine}");
+            TraverseDirectory(fileSystemContainer, "  ");
+        }
+
+        private static void TraverseDirectory(FileSystemContainer fileSystemContainer, string prefix, string sumPrefix = "")
+        {
+            ShowFileSystemContainer(fileSystemContainer, prefix);
+
+            foreach (var file in fileSystemContainer.Files)
+            {
+                ShowFileAnalysis(file, prefix);
+            }
+
+            foreach (var subFileSystemContainer in fileSystemContainer.FileSystemContainers)
+            {
+                TraverseDirectory(subFileSystemContainer, sumPrefix + prefix, prefix);
+            }
+        }
+
+        public static void ShowFileSystemContainer(FileSystemContainer fileSystemContainer, string prefix)
+        {
+            Console.WriteLine($"{prefix}Folder: {fileSystemContainer.FullPath}");
+        }
+
+        public static void ShowFileAnalysis(File file, string prefix)
+        {
+            Console.WriteLine($"{prefix}File: {file.FullPath}");
+            Console.WriteLine($"{prefix}Is text file: {file.IsTextFile}");
+            Console.WriteLine($"{prefix}Double spaces: {file.DoubleSpaceCount}");
+            Console.WriteLine($"{prefix}Tabs: {file.TabCount}");
+            Console.WriteLine($"{prefix}Has mixed spaces and tabs: {file.HasMixedSpaceAndTab}");
+            Console.WriteLine($"{prefix}CR end line: {file.CrCount}");
+            Console.WriteLine($"{prefix}LF end line: {file.LfCount}");
+            Console.WriteLine($"{prefix}CRLF end line: {file.CrLfCount}");
+            Console.WriteLine($"{prefix}Has mixed end line: {file.HasMixedEndLine}");
+            Console.WriteLine($"{prefix}Trailing whitespaces: {file.TrailingWhitespaceCount}");
+            Console.WriteLine($"{prefix}Final empty line: {file.FinalEmptyLineCount}");
         }
     }
 }
