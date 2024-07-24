@@ -39,29 +39,29 @@
             }
         }
 
-        public static void ShowDirectoryAnalysis(FileSystemContainer fileSystemContainer)
+        public static void ShowDirectoryAnalysis(Folder folder)
         {
-            TraverseDirectory(fileSystemContainer, "  ");
+            TraverseDirectory(folder, "  ");
         }
 
-        private static void TraverseDirectory(FileSystemContainer fileSystemContainer, string prefix, string sumPrefix = "")
+        private static void TraverseDirectory(Folder folder, string prefix, string sumPrefix = "")
         {
-            ShowFileSystemContainer(fileSystemContainer, prefix);
+            ShowFolder(folder, sumPrefix);
 
-            foreach (var file in fileSystemContainer.Files)
+            foreach (var file in folder.Files)
             {
                 ShowFileAnalysis(file, sumPrefix + prefix);
             }
 
-            foreach (var subFileSystemContainer in fileSystemContainer.FileSystemContainers)
+            foreach (var subFolder in folder.Folders)
             {
-                TraverseDirectory(subFileSystemContainer, sumPrefix + prefix, prefix);
+                TraverseDirectory(subFolder, prefix, sumPrefix + prefix);
             }
         }
 
-        public static void ShowFileSystemContainer(FileSystemContainer fileSystemContainer, string prefix)
+        public static void ShowFolder(Folder folder, string prefix)
         {
-            Console.WriteLine($"{prefix}Folder: {fileSystemContainer.FullPath}");
+            Console.WriteLine($"{prefix}Folder: {folder.FullPath}");
         }
 
         public static void ShowFileAnalysis(File file, string prefix)

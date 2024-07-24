@@ -18,8 +18,8 @@
             }
             else if (Directory.Exists(path))
             {
-                FileSystemContainer fileSystemContainer = TraverseDirectory(path);
-                UserInterface.ShowDirectoryAnalysis(fileSystemContainer);
+                Folder folder = TraverseDirectory(path);
+                UserInterface.ShowDirectoryAnalysis(folder);
             }
             else
             {
@@ -27,24 +27,24 @@
             }
         }
 
-        private FileSystemContainer TraverseDirectory(string directoryPath)
+        private Folder TraverseDirectory(string directoryPath)
         {
             if (!Directory.Exists(directoryPath))
                 throw new DirectoryNotFoundException("The specified directory does not exist.");
 
-            FileSystemContainer fileSystemContainer = new(directoryPath);
+            Folder folder = new(directoryPath);
 
             foreach (var file in Directory.GetFiles(directoryPath.Trim()))
             {
-                fileSystemContainer.Add(AnalyzeFile(file));
+                folder.Add(AnalyzeFile(file));
             }
 
             foreach (var directory in Directory.GetDirectories(directoryPath.Trim()))
             {
-                fileSystemContainer.Add(TraverseDirectory(directory));
+                folder.Add(TraverseDirectory(directory));
             }
 
-            return fileSystemContainer;
+            return folder;
         }
 
         private File AnalyzeFile(string filePath)

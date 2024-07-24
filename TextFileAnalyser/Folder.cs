@@ -1,8 +1,8 @@
 ﻿namespace TextFileAnalyser
 {
-    internal class FileSystemContainer
+    internal class Folder
     {
-        public FileSystemContainer(string fullPath)
+        public Folder(string fullPath)
         {
             if (!Directory.Exists(fullPath))
                 throw new DirectoryNotFoundException("The specified directory does not exist.");
@@ -11,16 +11,16 @@
             Name = Path.GetFileName(fullPath) ?? "[Root]";
 
             Files = [];
-            FileSystemContainers = [];
+            Folders = [];
         }
 
         public string Name { get; set; }
         public string FullPath { get; set; }
 
         public List<File> Files { get; }
-        public List<FileSystemContainer> FileSystemContainers { get; }
+        public List<Folder> Folders { get; }
 
         public void Add(File file) => Files.Add(file);
-        public void Add(FileSystemContainer fileSystemContainer) => FileSystemContainers.Add(fileSystemContainer);
+        public void Add(Folder folder) => Folders.Add(folder);
     }
 }
