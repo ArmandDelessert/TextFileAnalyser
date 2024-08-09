@@ -25,6 +25,9 @@
         public DateTime HashComputationDate /*{ get; private set; }*/ => throw new NotImplementedException();
         public bool IsTextFile { get; set; }
 
+        public int CharCount { get; set; }
+        public int LineCount { get; set; }
+
         public int DoubleSpaceCount { get; set; }
         public int TabCount { get; set; }
         public int SpaceCountForATab { get; set; }
