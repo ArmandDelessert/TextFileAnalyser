@@ -17,12 +17,14 @@ namespace TextFileAnalyser
                     PrintHeader();
                     StartInteractiveCli();
                 }
+#if !DEBUG
                 catch (Exception e)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"A fatal error occurred and the program will close.{Environment.NewLine}Exception details:{Environment.NewLine}{e}");
                     Console.ResetColor();
                 }
+#endif
                 finally
                 {
                     Console.WriteLine("Press any key to exit...");
@@ -41,7 +43,7 @@ namespace TextFileAnalyser
         {
             if (args.Length > 0 && Path.Exists(args[0]))
             {
-                Analyzer analyzer = new();
+                Analyser analyzer = new();
                 analyzer.AnalyzePath(args[0]);
             }
             else
@@ -53,7 +55,7 @@ namespace TextFileAnalyser
         private static void StartInteractiveCli()
         {
             var path = UserInterface.AskUserForPath();
-            Analyzer analyzer = new();
+            Analyser analyzer = new();
             analyzer.AnalyzePath(path);
         }
     }

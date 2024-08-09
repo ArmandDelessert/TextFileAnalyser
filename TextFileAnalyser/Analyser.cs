@@ -1,11 +1,9 @@
-﻿using System.Reflection.PortableExecutable;
-
-namespace TextFileAnalyser
+﻿namespace TextFileAnalyser
 {
-    internal class Analyzer
+    internal class Analyser
     {
         private const int WindowSize = 4;
-        private AnalyzerWindow Window = new(WindowSize);
+        private readonly AnalyzerWindow Window = new(WindowSize);
 
         public void AnalyzePath(string path)
         {
