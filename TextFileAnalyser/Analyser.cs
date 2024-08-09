@@ -1,6 +1,6 @@
 ﻿namespace TextFileAnalyser
 {
-    internal class Analyser
+    public class Analyser
     {
         private const int WindowSize = 4;
         private readonly AnalyzerWindow Window = new(WindowSize);
@@ -30,7 +30,7 @@
             }
         }
 
-        private Folder TraverseDirectory(string directoryPath)
+        public Folder TraverseDirectory(string directoryPath)
         {
             if (!Directory.Exists(directoryPath))
                 throw new DirectoryNotFoundException("The specified directory does not exist.");
@@ -50,7 +50,7 @@
             return folder;
         }
 
-        private File AnalyzeFile(string filePath)
+        public File AnalyzeFile(string filePath)
         {
             if (FileUtilities.IsTextFile(filePath))
             {
@@ -64,7 +64,7 @@
             }
         }
 
-        private File AnalyzeTextFile(string filePath)
+        public File AnalyzeTextFile(string filePath)
         {
             if (!System.IO.File.Exists(filePath))
                 throw new FileNotFoundException("The specified file does not exist.");
@@ -105,7 +105,7 @@
             return file;
         }
 
-        private static int CountDoubleSpaces(string line)
+        public static int CountDoubleSpaces(string line)
         {
             int count = 0;
             for (int i = 0; i < line.Length - 1; i++)
@@ -119,7 +119,7 @@
             return count;
         }
 
-        private static int CountEndings(string line, char ending)
+        public static int CountEndings(string line, char ending)
         {
             int count = 0;
             foreach (var c in line)
@@ -132,7 +132,7 @@
             return count;
         }
 
-        private static int CountEndings(string line, string ending)
+        public static int CountEndings(string line, string ending)
         {
             int count = 0;
             int index = 0;
@@ -144,7 +144,7 @@
             return count;
         }
 
-        private File AnalyzeTextFileCharByChar(string filePath)
+        public File AnalyzeTextFileCharByChar(string filePath)
         {
             if (!System.IO.File.Exists(filePath))
                 throw new FileNotFoundException("The specified file does not exist.");
@@ -155,7 +155,7 @@
             return AnalyzeStreamCharByChar(reader, file);
         }
 
-        private File AnalyzeStreamCharByChar(StreamReader reader, File file)
+        public File AnalyzeStreamCharByChar(TextReader reader, File file)
         {
             // Final stats
             int charCount = 0;

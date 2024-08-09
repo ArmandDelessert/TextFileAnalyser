@@ -1,6 +1,6 @@
 ﻿namespace TextFileAnalyser
 {
-    internal class Folder
+    public class Folder
     {
         public Folder(string fullPath)
         {

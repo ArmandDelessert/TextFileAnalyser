@@ -1,6 +1,6 @@
 ﻿namespace TextFileAnalyser
 {
-    internal struct File
+    public struct File
     {
         public File(string fullPath)
         {
