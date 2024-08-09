@@ -2,6 +2,9 @@
 {
     internal class Analyzer
     {
+        private const int WindowSize = 4;
+        private AnalyzerWindow Window = new(WindowSize);
+
         public void AnalyzePath(string path)
         {
             if (!Path.Exists(path))
@@ -83,11 +86,11 @@
                     }
 
                     file.DoubleSpaceCount += CountDoubleSpaces(line);
-                    file.TabCount += line.Count(c => c == '\t');
+                    file.TotalTabCount += line.Count(c => c == '\t');
 
                     if (line.EndsWith(' ') || line.EndsWith('\t'))
                     {
-                        ++file.TrailingWhitespaceCount;
+                        ++file.LineWithTrailingWhitespaceCount;
                     }
 
                     file.CrCount += CountEndings(line, '\r');
@@ -150,58 +153,65 @@
 
             using (var reader = new StreamReader(filePath))
             {
+                // Final stats
+                int charCount = 0;
                 int lineCount = 0;
-                int emptyLineCount = 0;
-                int spaceCount = 0;
+                int totalSpaceCount = 0;
                 int doubleSpaceCount = 0;
-                int tabCount = 0;
+                int totalTabCount = 0;
                 int crCount = 0;
                 int lfCount = 0;
                 int crlfCount = 0;
-                int trailingWhitespaceCount = 0;
-                bool previousWasCR = false;
+                int lineWithTrailingWhitespaceCount = 0;
+                int totalEmptyLineCount = 0;
+                int finalEmptyLineCount = 0;
+
+                // Temporary stats
                 bool lineEmpty = true;
 
                 int charRead;
-                char[] previousChars = new char[4];
                 while ((charRead = reader.Read()) != -1)
                 {
-                    char c = (char)charRead;
+                    charCount++;
+                    Window.AddChar((char)charRead);
 
-                    if (c == ' ')
+                    // Comptage des espaces
+                    if (Window.GetChar() == ' ')
                     {
-                        spaceCount++;
-                        if (previousChars == ' ')
+                        totalSpaceCount++;
+                        if (Window.GetChar(1) == ' ') // TODO : Ça marche pas ça. Il faut corriger.
                         {
                             doubleSpaceCount++;
                         }
                         lineEmpty = false;
                     }
-                    else if (c == '\t')
+                    // Comptage des tabulations
+                    else if (Window.GetChar() == '\t')
                     {
-                        tabCount++;
+                        totalTabCount++;
                         lineEmpty = false;
                     }
-                    else if (c == '\r')
+                    // Comptage des retour à la ligne (Carriage Return (CR))
+                    else if (Window.GetChar() == '\r')
                     {
                         crCount++;
-                        previousWasCR = true;
                         if (lineEmpty)
                         {
-                            emptyLineCount++;
+                            finalEmptyLineCount++;
                         }
                         else
                         {
-                            emptyLineCount = 0;
+                            finalEmptyLineCount = 0;
                         }
                         lineEmpty = true;
                     }
-                    else if (c == '\n')
+                    // Comptage des retours à la ligne (Line Feed (LF))
+                    else if (Window.GetChar() == '\n')
                     {
-                        if (previousWasCR)
+                        if (Window.GetChar(1) == '\r')
                         {
                             crlfCount++;
-                            crCount--; // Adjust the previous CR count because it is part of CRLF
+                            crCount--; // Adjust the previous CR count because it is part of CRLF.
                         }
                         else
                         {
@@ -209,44 +219,41 @@
                         }
                         if (lineEmpty)
                         {
-                            emptyLineCount++;
+                            finalEmptyLineCount++;
                         }
                         else
                         {
-                            emptyLineCount = 0;
+                            finalEmptyLineCount = 0;
                         }
                         lineEmpty = true;
-                        previousWasCR = false;
                     }
+                    // Autre caractère
                     else
                     {
                         lineEmpty = false;
-                        previousWasCR = false;
-                        spaceCount = 0;
                     }
 
                     // Check for trailing whitespace at the end of a line
-                    if (c == '\r' || c == '\n')
+                    if (Window.GetChar() == '\r' || Window.GetChar() == '\n')
                     {
-                        if (spaceCount > 0 || tabCount > 0)
+                        if (Window.GetChar(1) == ' ' || Window.GetChar(1) == '\t')
                         {
-                            trailingWhitespaceCount++;
+                            lineWithTrailingWhitespaceCount++;
                         }
-                        spaceCount = 0;
-                        tabCount = 0;
                     }
-
-                    previousChars += c;
                 }
 
+                file.CharCount = charCount;
                 file.LineCount = lineCount;
+                file.TotalSpaceCount = totalSpaceCount;
                 file.DoubleSpaceCount = doubleSpaceCount;
-                file.TabCount = tabCount;
+                file.TotalTabCount = totalTabCount;
                 file.CrCount = crCount;
                 file.LfCount = lfCount;
                 file.CrLfCount = crlfCount;
-                file.TrailingWhitespaceCount = trailingWhitespaceCount;
-                file.FinalEmptyLineCount = emptyLineCount;
+                file.LineWithTrailingWhitespaceCount = lineWithTrailingWhitespaceCount;
+                file.TotalEmptyLineCount = totalEmptyLineCount;
+                file.FinalEmptyLineCount = finalEmptyLineCount;
             }
 
             return file;
