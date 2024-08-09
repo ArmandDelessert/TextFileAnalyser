@@ -2,26 +2,27 @@
 {
     internal class AnalyzerWindow(int windowSize)
     {
-        public char[] Window { get; set; } = new char[windowSize];
+        public char[] Window { get; private set; } = new char[windowSize];
 
-        public int WindowSize { get; set; } = windowSize;
+        private int CurrentCharIndex => MoveIndex(NextCharIndex, -1);
 
-        public int WindowIndex { get; set; } = 0;
+        private int NextCharIndex { get; set; } = 0;
 
         public void AddChar(char c)
         {
-            Window[WindowIndex] = c;
-            MoveWindowIndex();
+            Window[NextCharIndex] = c;
+            IncreaseNextCharIndex();
         }
+
+        public char GetChar(int index = 0) => Window[MoveIndex(CurrentCharIndex, -index)];
 
         public char[] GetWindow() => Window;
 
-        private void MoveWindowIndex()
+        private void IncreaseNextCharIndex() => NextCharIndex = MoveIndex(NextCharIndex);
+
+        private int MoveIndex(int index, int increment = 1)
         {
-            if (WindowIndex < WindowSize - 1)
-                WindowIndex++;
-            else
-                WindowIndex = 0;
+            return (index + increment) % Window.Length;
         }
     }
 }
