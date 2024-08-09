@@ -1,6 +1,6 @@
 ﻿namespace TextFileAnalyser
 {
-    internal class AnalyzerWindow(int windowSize)
+    public class AnalyserWindow(int windowSize)
     {
         public char[] Window { get; private set; } = new char[windowSize];
 

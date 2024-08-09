@@ -3,7 +3,7 @@
     public class Analyser
     {
         private const int WindowSize = 4;
-        private readonly AnalyzerWindow Window = new(WindowSize);
+        private readonly AnalyserWindow Window = new(WindowSize);
 
         public void AnalyzePath(string path)
         {
