@@ -69,13 +69,13 @@
             Console.WriteLine($"{prefix}File: {file.FullPath}");
             Console.WriteLine($"{prefix} Is text file: {file.IsTextFile}");
             Console.WriteLine($"{prefix} Double spaces: {file.DoubleSpaceCount}");
-            Console.WriteLine($"{prefix} Tabs: {file.TabCount}");
+            Console.WriteLine($"{prefix} Tabs: {file.TotalTabCount}");
             Console.WriteLine($"{prefix} Has mixed spaces and tabs: {file.HasMixedSpaceAndTab}");
             Console.WriteLine($"{prefix} CR end line: {file.CrCount}");
             Console.WriteLine($"{prefix} LF end line: {file.LfCount}");
             Console.WriteLine($"{prefix} CRLF end line: {file.CrLfCount}");
             Console.WriteLine($"{prefix} Has mixed end line: {file.HasMixedEndLine}");
-            Console.WriteLine($"{prefix} Trailing whitespaces: {file.TrailingWhitespaceCount}");
+            Console.WriteLine($"{prefix} Trailing whitespaces: {file.LineWithTrailingWhitespaceCount}");
             Console.WriteLine($"{prefix} Final empty line: {file.FinalEmptyLineCount}");
         }
     }

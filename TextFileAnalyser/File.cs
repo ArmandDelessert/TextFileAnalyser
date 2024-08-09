@@ -28,10 +28,12 @@
         public int CharCount { get; set; }
         public int LineCount { get; set; }
 
+        public int TotalSpaceCount { get; set; }
         public int DoubleSpaceCount { get; set; }
-        public int TabCount { get; set; }
         public int SpaceCountForATab { get; set; }
-        public readonly bool HasMixedSpaceAndTab => DoubleSpaceCount > 0 && TabCount > 0;
+        public int SpaceTabCount { get; set; }
+        public int TotalTabCount { get; set; }
+        public readonly bool HasMixedSpaceAndTab => DoubleSpaceCount > 0 && TotalTabCount > 0;
 
         public int CrCount { get; set; }
         public int LfCount { get; set; }
@@ -41,7 +43,8 @@
             || CrCount > 0 && CrLfCount > 0
             || LfCount > 0 && CrLfCount > 0;
 
-        public int TrailingWhitespaceCount { get; set; }
+        public int LineWithTrailingWhitespaceCount { get; set; }
+        public int TotalEmptyLineCount { get; set; }
         public int FinalEmptyLineCount { get; set; }
 
         public void ComputeHash() { throw new NotImplementedException(); }
