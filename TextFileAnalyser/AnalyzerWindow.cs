@@ -20,9 +20,6 @@
 
         private void IncreaseNextCharIndex() => NextCharIndex = MoveIndex(NextCharIndex);
 
-        private int MoveIndex(int index, int increment = 1)
-        {
-            return (index + increment) % Window.Length;
-        }
+        private int MoveIndex(int index, int increment = 1) => Math.Abs((index + increment) % Window.Length);
     }
 }
