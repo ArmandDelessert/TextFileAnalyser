@@ -139,5 +139,117 @@
             }
             return count;
         }
+
+        // Test fonction de ChatGPT
+        private File AnalyzeTextFileCharByChar(string filePath)
+        {
+            if (!System.IO.File.Exists(filePath))
+                throw new FileNotFoundException("The specified file does not exist.");
+
+            var file = new File(filePath, true);
+
+            using (var reader = new StreamReader(filePath))
+            {
+                int lineCount = 0;
+                int emptyLineCount = 0;
+                int spaceCount = 0;
+                int doubleSpaceCount = 0;
+                int tabCount = 0;
+                int crCount = 0;
+                int lfCount = 0;
+                int crlfCount = 0;
+                int trailingWhitespaceCount = 0;
+                bool previousWasCR = false;
+                bool lineEmpty = true;
+
+                int charRead;
+                char[] previousChars = new char[4];
+                while ((charRead = reader.Read()) != -1)
+                {
+                    char c = (char)charRead;
+
+                    if (c == ' ')
+                    {
+                        spaceCount++;
+                        if (previousChars == ' ')
+                        {
+                            doubleSpaceCount++;
+                        }
+                        lineEmpty = false;
+                    }
+                    else if (c == '\t')
+                    {
+                        tabCount++;
+                        lineEmpty = false;
+                    }
+                    else if (c == '\r')
+                    {
+                        crCount++;
+                        previousWasCR = true;
+                        if (lineEmpty)
+                        {
+                            emptyLineCount++;
+                        }
+                        else
+                        {
+                            emptyLineCount = 0;
+                        }
+                        lineEmpty = true;
+                    }
+                    else if (c == '\n')
+                    {
+                        if (previousWasCR)
+                        {
+                            crlfCount++;
+                            crCount--; // Adjust the previous CR count because it is part of CRLF
+                        }
+                        else
+                        {
+                            lfCount++;
+                        }
+                        if (lineEmpty)
+                        {
+                            emptyLineCount++;
+                        }
+                        else
+                        {
+                            emptyLineCount = 0;
+                        }
+                        lineEmpty = true;
+                        previousWasCR = false;
+                    }
+                    else
+                    {
+                        lineEmpty = false;
+                        previousWasCR = false;
+                        spaceCount = 0;
+                    }
+
+                    // Check for trailing whitespace at the end of a line
+                    if (c == '\r' || c == '\n')
+                    {
+                        if (spaceCount > 0 || tabCount > 0)
+                        {
+                            trailingWhitespaceCount++;
+                        }
+                        spaceCount = 0;
+                        tabCount = 0;
+                    }
+
+                    previousChars += c;
+                }
+
+                file.LineCount = lineCount;
+                file.DoubleSpaceCount = doubleSpaceCount;
+                file.TabCount = tabCount;
+                file.CrCount = crCount;
+                file.LfCount = lfCount;
+                file.CrLfCount = crlfCount;
+                file.TrailingWhitespaceCount = trailingWhitespaceCount;
+                file.FinalEmptyLineCount = emptyLineCount;
+            }
+
+            return file;
+        }
     }
 }
