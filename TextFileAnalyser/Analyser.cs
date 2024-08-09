@@ -187,20 +187,20 @@
                     {
                         doubleSpaceCount++;
                     }
-                    lineEmpty = false;
                 }
                 // Comptage des tabulations
                 else if (Window.GetChar() == '\t')
                 {
                     totalTabCount++;
-                    lineEmpty = false;
                 }
                 // Comptage des retour à la ligne (Carriage Return (CR))
                 else if (Window.GetChar() == '\r')
                 {
                     crCount++;
+                    lineCount++;
                     if (lineEmpty)
                     {
+                        totalEmptyLineCount++;
                         finalEmptyLineCount++;
                     }
                     else
@@ -216,13 +216,22 @@
                     {
                         crlfCount++;
                         crCount--; // Adjust the previous CR count because it is part of CRLF.
+
+                        if (lineEmpty)
+                        {
+                            totalEmptyLineCount--;
+                            finalEmptyLineCount--;
+                        }
                     }
                     else
                     {
                         lfCount++;
+                        lineCount++;
                     }
+
                     if (lineEmpty)
                     {
+                        totalEmptyLineCount++;
                         finalEmptyLineCount++;
                     }
                     else
