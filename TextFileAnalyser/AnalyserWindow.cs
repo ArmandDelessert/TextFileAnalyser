@@ -20,6 +20,6 @@
 
         private void IncreaseNextCharIndex() => NextCharIndex = MoveIndex(NextCharIndex);
 
-        private int MoveIndex(int index, int increment = 1) => Math.Abs((index + increment) % Window.Length);
+        private int MoveIndex(int index, int increment = 1) => Math.Abs((index + increment) % Window.Length); // TODO : Corriger ça. (https://learn.microsoft.com/fr-fr/dotnet/csharp/language-reference/operators/arithmetic-operators#code-try-9)
     }
 }
