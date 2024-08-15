@@ -16,7 +16,7 @@ namespace TextFileAnalyser.Test
 
         public int MaxIndex { get; }
 
-        public int Range => MaxIndex - MinIndex;
+        public int Range => MaxIndex - MinIndex + 1;
 
         public int Index { get; private set; }
 
@@ -26,12 +26,15 @@ namespace TextFileAnalyser.Test
 
         public void Increase(int increment = 1)
         {
-            Index = DumbIncreaseIndex(Index, increment);
+            var result = DumbIncreaseIndex(Index, UpRollingCount, DownRollingCount, increment);
+            Index = result.Index;
+            UpRollingCount = result.UpRolingCount;
+            DownRollingCount = result.DownRollingCount;
         }
 
-        public int GetNextIndex(int increment = 1) => DumbIncreaseIndex(Index, increment);
+        public int GetNextIndex(int increment = 1) => DumbIncreaseIndex(Index, UpRollingCount, DownRollingCount, increment).Index;
 
-        private int DumbIncreaseIndex(int index, int increment)
+        private (int Index, int UpRolingCount , int DownRollingCount) DumbIncreaseIndex(int index, int upRollingCount, int downRollingCount, int increment)
         {
             if (increment > 0)
             {
@@ -41,7 +44,10 @@ namespace TextFileAnalyser.Test
                     increment--;
 
                     if (index > MaxIndex)
+                    {
                         index = MinIndex;
+                        upRollingCount++;
+                    }
                 }
             }
             else if (increment < 0)
@@ -52,11 +58,14 @@ namespace TextFileAnalyser.Test
                     increment++;
 
                     if (index < MinIndex)
+                    {
                         index = MaxIndex;
+                        downRollingCount++;
+                    }
                 }
             }
 
-            return index;
+            return (index, upRollingCount, downRollingCount);
         }
 
         private void SmartIncrease(int increment)
