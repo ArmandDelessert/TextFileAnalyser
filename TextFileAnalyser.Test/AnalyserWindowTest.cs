@@ -4,7 +4,7 @@
     public class AnalyserWindowTest
     {
         [TestMethod]
-        public void AddChar_5chars()
+        public void AddChar_Then_GetChar_And_GetWindow()
         {
             // Prepare
             const int windowSize = 4;
@@ -28,18 +28,11 @@
             {
                 Assert.AreEqual(expectedChars[i], actualChars[i]);
             }
-        }
 
-        [TestMethod]
-        public void GetChar_()
-        {
-
-        }
-
-        [TestMethod]
-        public void GetWindow_()
-        {
-
+            for (int i = 0; i < analyserWindow.GetWindow().Length; i++)
+            {
+                Assert.AreEqual(expectedChars[i + 1], analyserWindow.GetWindow()[i]);
+            }
         }
     }
 }
