@@ -1,25 +1,25 @@
-﻿namespace TextFileAnalyser
+﻿using TextFileAnalyser.Test;
+
+namespace TextFileAnalyser
 {
     public class AnalyserWindow(int windowSize)
     {
         public char[] Window { get; private set; } = new char[windowSize];
 
-        private int CurrentCharIndex => MoveIndex(NextCharIndex, -1);
+        private RollingIndex CurrentCharIndex { get; set; } = new RollingIndex(0, windowSize - 1);
 
-        private int NextCharIndex { get; set; } = 0;
+        private int NextCharIndex => CurrentCharIndex.GetNextIndex();
 
         public void AddChar(char c)
         {
             Window[NextCharIndex] = c;
-            IncreaseNextCharIndex();
+            IncreaseWindowIndex();
         }
 
-        public char GetChar(int index = 0) => Window[MoveIndex(CurrentCharIndex, -index)];
+        public char GetChar(int index = 0) => Window[CurrentCharIndex.GetNextIndex(-index)];
 
         public char[] GetWindow() => Window;
 
-        private void IncreaseNextCharIndex() => NextCharIndex = MoveIndex(NextCharIndex);
-
-        private int MoveIndex(int index, int increment = 1) => Math.Abs((index + increment) % Window.Length); // TODO : Corriger ça. (https://learn.microsoft.com/fr-fr/dotnet/csharp/language-reference/operators/arithmetic-operators#code-try-9)
+        private void IncreaseWindowIndex() => CurrentCharIndex.Increase();
     }
 }
