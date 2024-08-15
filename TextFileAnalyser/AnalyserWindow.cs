@@ -18,7 +18,7 @@ namespace TextFileAnalyser
 
         public char GetChar(int index = 0) => Window[CurrentCharIndex.GetNextIndex(-index)];
 
-        public char[] GetWindow() => Window;
+        public char[] GetWindow() => Window; // TODO : Formatter le tableau pour que l'index actuel soit en position 0.
 
         private void IncreaseWindowIndex() => CurrentCharIndex.Increase();
     }
