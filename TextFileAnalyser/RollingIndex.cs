@@ -26,33 +26,37 @@ namespace TextFileAnalyser.Test
 
         public void Increase(int increment = 1)
         {
-            DumbIncrease(increment);
+            Index = DumbIncreaseIndex(Index, increment);
         }
 
-        private void DumbIncrease(int increment)
+        public int GetNextIndex(int increment = 1) => DumbIncreaseIndex(Index, increment);
+
+        private int DumbIncreaseIndex(int index, int increment)
         {
             if (increment > 0)
             {
                 while (increment > 0)
                 {
-                    Index++;
+                    index++;
                     increment--;
 
-                    if (Index > MaxIndex)
-                        Index = MinIndex;
+                    if (index > MaxIndex)
+                        index = MinIndex;
                 }
             }
             else if (increment < 0)
             {
                 while (increment < 0)
                 {
-                    Index--;
+                    index--;
                     increment++;
 
-                    if (Index < MinIndex)
-                        Index = MaxIndex;
+                    if (index < MinIndex)
+                        index = MaxIndex;
                 }
             }
+
+            return index;
         }
 
         private void SmartIncrease(int increment)
