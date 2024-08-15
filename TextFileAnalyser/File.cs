@@ -33,7 +33,7 @@
         public int SpaceCountForATab { get; set; }
         public int SpaceTabCount { get; set; }
         public int TotalTabCount { get; set; }
-        public readonly bool HasMixedSpaceAndTab => DoubleSpaceCount > 0 && TotalTabCount > 0;
+        public readonly bool HasMixedSpaceAndTab => DoubleSpaceCount > 0 && TotalTabCount > 0; // TODO : Si un espace suit un tabulation ?
 
         public int CrCount { get; set; }
         public int LfCount { get; set; }
