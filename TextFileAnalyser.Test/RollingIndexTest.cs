@@ -11,7 +11,7 @@
             const int maxIndex = 3;
 
             // Act
-            var rollingIndex = new RollingIndex(minIndex, maxIndex);
+            var rollingIndex = new RollingIndex(minIndex, maxIndex, 0);
 
             // Test
             Assert.AreEqual(minIndex, rollingIndex.MinIndex);
@@ -25,7 +25,7 @@
             // Prepare
             const int minIndex = 0;
             const int maxIndex = 3;
-            var rollingIndex = new RollingIndex(minIndex, maxIndex);
+            var rollingIndex = new RollingIndex(minIndex, maxIndex, 0);
 
             // Act
             var index_0 = rollingIndex.Index;

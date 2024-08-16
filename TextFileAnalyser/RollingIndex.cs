@@ -2,14 +2,17 @@ namespace TextFileAnalyser.Test
 {
     public class RollingIndex
     {
-        public RollingIndex(int minIndex, int maxIndex)
+        public RollingIndex(int minIndex, int maxIndex, int initialIndex)
         {
             if (minIndex >= maxIndex)
-                throw new ArgumentException("La valeur minimale doit être plus petite que la valeur maximale.");
+                throw new ArgumentException("La valeur minimale doit être plus petite que la valeur maximale.", $"{nameof(minIndex)}, {nameof(maxIndex)}");
+
+            if (initialIndex < minIndex || initialIndex > maxIndex)
+                throw new ArgumentException("La valeur initialie de l'index doit être contenue entre les bornes minimale et maximuale.", nameof(initialIndex));
 
             MinIndex = minIndex;
             MaxIndex = maxIndex;
-            Index = MinIndex;
+            Index = initialIndex;
         }
 
         public int MinIndex { get; }

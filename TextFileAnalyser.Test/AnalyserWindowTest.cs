@@ -51,9 +51,10 @@
             // Test
             for (int i = 0; i < windows.Count; i++)
             {
+                int k = i >= windowSize ? i - windowSize + 1 : 0;
                 for (int j = 0; j < windows[i].Count; j++)
                 {
-                    Assert.AreEqual(expectedChars[j], windows[i][j]);
+                    Assert.AreEqual(expectedChars[j + k], windows[i][j]);
                 }
             }
         }
