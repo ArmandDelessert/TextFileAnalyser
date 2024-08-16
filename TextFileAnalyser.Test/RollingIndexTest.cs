@@ -4,7 +4,7 @@
     public class RollingIndexTest
     {
         [TestMethod]
-        public void MinIndex_MaxIndex()
+        public void MinIndex_MaxIndex_Test()
         {
             // Prepare
             const int minIndex = 0;
@@ -20,7 +20,7 @@
         }
 
         [TestMethod]
-        public void Increase()
+        public void Increase_Test()
         {
             // Prepare
             const int minIndex = 0;
