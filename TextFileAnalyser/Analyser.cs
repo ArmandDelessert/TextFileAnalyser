@@ -215,7 +215,7 @@
                     if (Window.GetChar(1) == '\r')
                     {
                         crlfCount++;
-                        crCount--; // Adjust the previous CR count because it is part of CRLF.
+                        crCount--; // Retire le CR précédent du comptage car il fait partie du CRLF.
 
                         if (lineEmpty)
                         {
@@ -246,7 +246,7 @@
                     lineEmpty = false;
                 }
 
-                // Check for trailing whitespace at the end of a line
+                // Vérification des espaces blancs en fin de ligne.
                 if (Window.GetChar() == '\r' || Window.GetChar() == '\n')
                 {
                     if (Window.GetChar(1) == ' ' || Window.GetChar(1) == '\t')
@@ -254,6 +254,12 @@
                         lineWithTrailingWhitespaceCount++;
                     }
                 }
+            }
+
+            // Si le dernier caractère n'est pas un retour à la ligne, il faut compter la dernière ligne comme une ligne en plus.
+            if (Window.CharAdded > 0 && (Window.GetChar() != '\r' && Window.GetChar() != '\n'))
+            {
+                lineCount++;
             }
 
             file.CharCount = charCount;
