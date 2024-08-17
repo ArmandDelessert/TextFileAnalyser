@@ -54,7 +54,7 @@ namespace TextFileAnalyser.Test
             // Test
 
             Assert.AreEqual(1, result.CharCount);
-            Assert.AreEqual(0, result.LineCount);
+            Assert.AreEqual(1, result.LineCount);
 
             Assert.AreEqual(1, result.TotalSpaceCount);
             Assert.AreEqual(0, result.DoubleSpaceCount);
@@ -66,9 +66,9 @@ namespace TextFileAnalyser.Test
             Assert.AreEqual(0, result.CrLfCount);
             Assert.IsFalse(result.HasMixedEndLine);
 
-            Assert.AreEqual(0, result.LineWithTrailingWhitespaceCount);
-            Assert.AreEqual(0, result.TotalEmptyLineCount);
-            Assert.AreEqual(0, result.FinalEmptyLineCount);
+            Assert.AreEqual(1, result.LineWithTrailingWhitespaceCount);
+            Assert.AreEqual(1, result.TotalEmptyLineCount);
+            Assert.AreEqual(1, result.FinalEmptyLineCount);
         }
 
         [TestMethod]
@@ -87,7 +87,7 @@ namespace TextFileAnalyser.Test
             // Test
 
             Assert.AreEqual(1, result.CharCount);
-            Assert.AreEqual(0, result.LineCount);
+            Assert.AreEqual(1, result.LineCount);
 
             Assert.AreEqual(0, result.TotalSpaceCount);
             Assert.AreEqual(0, result.DoubleSpaceCount);
@@ -99,9 +99,9 @@ namespace TextFileAnalyser.Test
             Assert.AreEqual(0, result.CrLfCount);
             Assert.IsFalse(result.HasMixedEndLine);
 
-            Assert.AreEqual(0, result.LineWithTrailingWhitespaceCount);
-            Assert.AreEqual(0, result.TotalEmptyLineCount);
-            Assert.AreEqual(0, result.FinalEmptyLineCount);
+            Assert.AreEqual(1, result.LineWithTrailingWhitespaceCount);
+            Assert.AreEqual(1, result.TotalEmptyLineCount);
+            Assert.AreEqual(1, result.FinalEmptyLineCount);
         }
 
         [TestMethod]
@@ -204,33 +204,33 @@ namespace TextFileAnalyser.Test
         }
 
         [TestMethod]
-        public void AnalyzeStreamCharByChar_WithTrailingWhitespace()
+        public void AnalyzeStreamCharByChar_WithTrailingWhitespaceAndEmptyLines()
         {
             // Prepare
 
             var analyser = new Analyser();
 
-            var reader = new StringReader(" \r\t\r");
+            var reader = new StringReader(" \ra\r\t\r");
 
             // Act
             var result = analyser.AnalyzeStreamCharByChar(reader, file);
 
             // Test
-            Assert.AreEqual(4, result.CharCount);
-            Assert.AreEqual(2, result.LineCount);
+            Assert.AreEqual(6, result.CharCount);
+            Assert.AreEqual(4, result.LineCount);
 
             Assert.AreEqual(1, result.TotalSpaceCount);
             Assert.AreEqual(0, result.DoubleSpaceCount);
             Assert.AreEqual(1, result.TotalTabCount);
             Assert.IsFalse(result.HasMixedSpaceAndTab);
 
-            Assert.AreEqual(2, result.CrCount);
+            Assert.AreEqual(3, result.CrCount);
             Assert.AreEqual(0, result.LfCount);
             Assert.AreEqual(0, result.CrLfCount);
             Assert.IsFalse(result.HasMixedEndLine);
 
             Assert.AreEqual(2, result.LineWithTrailingWhitespaceCount);
-            Assert.AreEqual(2, result.TotalEmptyLineCount);
+            Assert.AreEqual(3, result.TotalEmptyLineCount);
             Assert.AreEqual(2, result.FinalEmptyLineCount);
         }
 
