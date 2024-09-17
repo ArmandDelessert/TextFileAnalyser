@@ -217,7 +217,7 @@ namespace TextFileAnalyser.Test
 
             // Test
             Assert.AreEqual(6, result.CharCount);
-            Assert.AreEqual(4, result.LineCount);
+            Assert.AreEqual(3, result.LineCount);
 
             Assert.AreEqual(1, result.TotalSpaceCount);
             Assert.AreEqual(0, result.DoubleSpaceCount);
@@ -230,8 +230,8 @@ namespace TextFileAnalyser.Test
             Assert.IsFalse(result.HasMixedEndLine);
 
             Assert.AreEqual(2, result.LineWithTrailingWhitespaceCount);
-            Assert.AreEqual(3, result.TotalEmptyLineCount);
-            Assert.AreEqual(2, result.FinalEmptyLineCount);
+            Assert.AreEqual(2, result.TotalEmptyLineCount);
+            Assert.AreEqual(1, result.FinalEmptyLineCount);
         }
 
         [TestMethod]
