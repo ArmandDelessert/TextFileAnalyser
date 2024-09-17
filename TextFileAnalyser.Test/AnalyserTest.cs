@@ -1,9 +1,18 @@
-namespace TextFileAnalyser.Test
+﻿namespace TextFileAnalyser.Test
 {
     [TestClass]
     public class AnalyserTest
     {
         private readonly File file = new();
+
+        /* TODO : Combinaisons à tester :
+        " \r"
+        " \n"
+        " \r\n"
+        "\t\r"
+        "\t\n"
+        "\t\r\n"
+         */
 
         [TestMethod]
         public void AnalyzeStreamCharByChar_WithEmptyText()

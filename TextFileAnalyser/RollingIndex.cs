@@ -1,4 +1,4 @@
-namespace TextFileAnalyser.Test
+﻿namespace TextFileAnalyser.Test
 {
     public class RollingIndex
     {
