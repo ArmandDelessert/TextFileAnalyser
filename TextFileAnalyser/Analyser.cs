@@ -171,7 +171,7 @@
             int finalEmptyLineCount = 0;
 
             // Temporary stats
-            bool lineEmpty = true;
+            bool lineEmpty = true; // Ligne vide ou avec uniquement des espaces blancs.
 
             int charRead;
             while ((charRead = reader.Read()) != -1)
@@ -207,7 +207,7 @@
                     {
                         finalEmptyLineCount = 0;
                     }
-                    lineEmpty = true;
+                    lineEmpty = true; // Réinistialisation de l'indicateur.
                 }
                 // Comptage des retours à la ligne (Line Feed (LF))
                 else if (Window.GetChar() == '\n')
@@ -219,6 +219,7 @@
 
                         if (lineEmpty)
                         {
+                            // TODO : Pourquoi ?
                             totalEmptyLineCount--;
                             finalEmptyLineCount--;
                         }
@@ -238,7 +239,7 @@
                     {
                         finalEmptyLineCount = 0;
                     }
-                    lineEmpty = true;
+                    lineEmpty = true; // Réinistialisation de l'indicateur.
                 }
                 // Autre caractère
                 else
