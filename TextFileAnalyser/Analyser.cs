@@ -258,9 +258,22 @@
             }
 
             // Si le dernier caractère n'est pas un retour à la ligne, il faut compter la dernière ligne comme une ligne en plus.
-            if (Window.CharAdded > 0 && (Window.GetChar() != '\r' && Window.GetChar() != '\n'))
+            if (charCount > 0 && (Window.GetChar() != '\r' && Window.GetChar() != '\n'))
             {
                 lineCount++;
+
+                // Comptage de la dernière ligne si elle est vide.
+                if (lineEmpty)
+                {
+                    totalEmptyLineCount++;
+                    finalEmptyLineCount++;
+                }
+            }
+
+            // Vérification des espaces blancs en fin de fichier.
+            if (Window.GetChar(0) == ' ' || Window.GetChar(0) == '\t')
+            {
+                lineWithTrailingWhitespaceCount++;
             }
 
             file.CharCount = charCount;
