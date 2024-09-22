@@ -12,8 +12,11 @@ public class AnalyserTest
     [DataRow("\r", 1, 1, 0, 0, 0, false, 1, 0, 0, false, 0, 1, 1)]
     [DataRow("\n", 1, 1, 0, 0, 0, false, 0, 1, 0, false, 0, 1, 1)]
     [DataRow("\r\n", 2, 1, 0, 0, 0, false, 0, 0, 1, false, 0, 1, 1)]
+    [DataRow("a\r", 2, 1, 0, 0, 0, false, 1, 0, 0, false, 0, 1, 1)] // TODO : Il y a une dernière ligne vide ou pas là ?
+    [DataRow("a\n", 2, 1, 0, 0, 0, false, 0, 1, 0, false, 0, 1, 1)] // TODO : Il y a une dernière ligne vide ou pas là ?
+    [DataRow("a\r\n", 3, 1, 0, 0, 0, false, 0, 0, 1, false, 0, 1, 1)] // TODO : Il y a une dernière ligne vide ou pas là ?
     [DataRow(" \ra\r\t\r", 6, 3, 1, 0, 1, false, 3, 0, 0, false, 2, 2, 1)]
-    [DataRow("\t a\r", 4, 1, 1, 0, 1, true, 1, 0, 0, false, 0, 0, 0)]
+    [DataRow("\t a\r", 4, 1, 1, 0, 1, true, 1, 0, 0, false, 0, 0, 0)] // TODO : Corriger `HasMixedSpaceAndTab`.
     [DataRow("\n\r", 2, 2, 0, 0, 0, false, 1, 1, 0, true, 0, 2, 2)]
     [DataRow(" \r", 2, 1, 1, 0, 0, false, 1, 0, 0, false, 1, 1, 1)]
     [DataRow(" \n", 2, 1, 1, 0, 0, false, 0, 1, 0, false, 1, 1, 1)]
@@ -21,6 +24,7 @@ public class AnalyserTest
     [DataRow("\t\r", 2, 1, 0, 0, 1, false, 1, 0, 0, false, 1, 1, 1)]
     [DataRow("\t\n", 2, 1, 0, 0, 1, false, 0, 1, 0, false, 1, 1, 1)]
     [DataRow("\t\r\n", 3, 1, 0, 0, 1, false, 0, 0, 1, false, 1, 1, 1)]
+    [DataRow("ABCDEFGHIJKLMNOPQRSTUVWXYZ\r\nabcdefghijklmnopqrstuvwxyz\r\n0123456789\r\n", 68, 3, 0, 0, 0, false, 0, 0, 3, false, 0, 0, 0)]
     public void AnalyzeStreamCharByChar_TestCases(
     string input,
     int expectedCharCount,
