@@ -5,340 +5,64 @@ public class AnalyserTest
 {
     private readonly File file = new();
 
-    /* TODO : Combinaisons à tester :
-    " \r"
-    " \n"
-    " \r\n"
-    "\t\r"
-    "\t\n"
-    "\t\r\n"
-     */
-
-    [TestMethod]
-    public void AnalyzeStreamCharByChar_WithEmptyText()
+    [DataTestMethod]
+    [DataRow("", 0, 0, 0, 0, 0, false, 0, 0, 0, false, 0, 0, 0)]
+    [DataRow(" ", 1, 1, 1, 0, 0, false, 0, 0, 0, false, 1, 1, 1)]
+    [DataRow("\t", 1, 1, 0, 0, 1, false, 0, 0, 0, false, 1, 1, 1)]
+    [DataRow("\r", 1, 1, 0, 0, 0, false, 1, 0, 0, false, 0, 1, 1)]
+    [DataRow("\n", 1, 1, 0, 0, 0, false, 0, 1, 0, false, 0, 1, 1)]
+    [DataRow("\r\n", 2, 1, 0, 0, 0, false, 0, 0, 1, false, 0, 1, 1)]
+    [DataRow(" \ra\r\t\r", 6, 3, 1, 0, 1, false, 3, 0, 0, false, 2, 2, 1)]
+    [DataRow("\t a\r", 4, 1, 1, 0, 1, true, 1, 0, 0, false, 0, 0, 0)]
+    [DataRow("\n\r", 2, 2, 0, 0, 0, false, 1, 1, 0, true, 0, 2, 2)]
+    [DataRow(" \r", 2, 1, 1, 0, 0, false, 1, 0, 0, false, 1, 1, 1)]
+    [DataRow(" \n", 2, 1, 1, 0, 0, false, 0, 1, 0, false, 1, 1, 1)]
+    [DataRow(" \r\n", 3, 1, 1, 0, 0, false, 0, 0, 1, false, 1, 1, 1)]
+    [DataRow("\t\r", 2, 1, 0, 0, 1, false, 1, 0, 0, false, 1, 1, 1)]
+    [DataRow("\t\n", 2, 1, 0, 0, 1, false, 0, 1, 0, false, 1, 1, 1)]
+    [DataRow("\t\r\n", 3, 1, 0, 0, 1, false, 0, 0, 1, false, 1, 1, 1)]
+    public void AnalyzeStreamCharByChar_TestCases(
+    string input,
+    int expectedCharCount,
+    int expectedLineCount,
+    int expectedTotalSpaceCount,
+    int expectedDoubleSpaceCount,
+    int expectedTotalTabCount,
+    bool expectedHasMixedSpaceAndTab,
+    int expectedCrCount,
+    int expectedLfCount,
+    int expectedCrLfCount,
+    bool expectedHasMixedEndLine,
+    int expectedLineWithTrailingWhitespaceCount,
+    int expectedTotalEmptyLineCount,
+    int expectedFinalEmptyLineCount)
     {
-        // Prepare
+        // Préparation
 
         var analyser = new Analyser();
+        var reader = new StringReader(input);
 
-        var reader = new StringReader("");
-
-        // Act
+        // Action
 
         var result = analyser.AnalyzeStreamCharByChar(reader, file);
 
-        // Test
+        // Assertions
 
-        Assert.AreEqual(0, result.CharCount);
-        Assert.AreEqual(0, result.LineCount);
+        Assert.AreEqual(expectedCharCount, result.CharCount, "CharCount");
+        Assert.AreEqual(expectedLineCount, result.LineCount, "LineCount");
 
-        Assert.AreEqual(0, result.TotalSpaceCount);
-        Assert.AreEqual(0, result.DoubleSpaceCount);
-        Assert.AreEqual(0, result.TotalTabCount);
-        Assert.IsFalse(result.HasMixedSpaceAndTab);
+        Assert.AreEqual(expectedTotalSpaceCount, result.TotalSpaceCount, "TotalSpaceCount");
+        Assert.AreEqual(expectedDoubleSpaceCount, result.DoubleSpaceCount, "DoubleSpaceCount");
+        Assert.AreEqual(expectedTotalTabCount, result.TotalTabCount, "TotalTabCount");
+        Assert.AreEqual(expectedHasMixedSpaceAndTab, result.HasMixedSpaceAndTab, "HasMixedSpaceAndTab");
 
-        Assert.AreEqual(0, result.CrCount);
-        Assert.AreEqual(0, result.LfCount);
-        Assert.AreEqual(0, result.CrLfCount);
-        Assert.IsFalse(result.HasMixedEndLine);
+        Assert.AreEqual(expectedCrCount, result.CrCount, "CrCount");
+        Assert.AreEqual(expectedLfCount, result.LfCount, "LfCount");
+        Assert.AreEqual(expectedCrLfCount, result.CrLfCount, "CrLfCount");
+        Assert.AreEqual(expectedHasMixedEndLine, result.HasMixedEndLine, "HasMixedEndLine");
 
-        Assert.AreEqual(0, result.LineWithTrailingWhitespaceCount);
-        Assert.AreEqual(0, result.TotalEmptyLineCount);
-        Assert.AreEqual(0, result.FinalEmptyLineCount);
+        Assert.AreEqual(expectedLineWithTrailingWhitespaceCount, result.LineWithTrailingWhitespaceCount, "LineWithTrailingWhitespaceCount");
+        Assert.AreEqual(expectedTotalEmptyLineCount, result.TotalEmptyLineCount, "TotalEmptyLineCount");
+        Assert.AreEqual(expectedFinalEmptyLineCount, result.FinalEmptyLineCount, "FinalEmptyLineCount");
     }
-
-    [TestMethod]
-    public void AnalyzeStreamCharByChar_WithOneSpace()
-    {
-        // Prepare
-
-        var analyser = new Analyser();
-
-        var reader = new StringReader(" ");
-
-        // Act
-
-        var result = analyser.AnalyzeStreamCharByChar(reader, file);
-
-        // Test
-
-        Assert.AreEqual(1, result.CharCount);
-        Assert.AreEqual(1, result.LineCount);
-
-        Assert.AreEqual(1, result.TotalSpaceCount);
-        Assert.AreEqual(0, result.DoubleSpaceCount);
-        Assert.AreEqual(0, result.TotalTabCount);
-        Assert.IsFalse(result.HasMixedSpaceAndTab);
-
-        Assert.AreEqual(0, result.CrCount);
-        Assert.AreEqual(0, result.LfCount);
-        Assert.AreEqual(0, result.CrLfCount);
-        Assert.IsFalse(result.HasMixedEndLine);
-
-        Assert.AreEqual(1, result.LineWithTrailingWhitespaceCount);
-        Assert.AreEqual(1, result.TotalEmptyLineCount);
-        Assert.AreEqual(1, result.FinalEmptyLineCount);
-    }
-
-    [TestMethod]
-    public void AnalyzeStreamCharByChar_WithOneTab()
-    {
-        // Prepare
-
-        var analyser = new Analyser();
-
-        var reader = new StringReader("\t");
-
-        // Act
-
-        var result = analyser.AnalyzeStreamCharByChar(reader, file);
-
-        // Test
-
-        Assert.AreEqual(1, result.CharCount);
-        Assert.AreEqual(1, result.LineCount);
-
-        Assert.AreEqual(0, result.TotalSpaceCount);
-        Assert.AreEqual(0, result.DoubleSpaceCount);
-        Assert.AreEqual(1, result.TotalTabCount);
-        Assert.IsFalse(result.HasMixedSpaceAndTab);
-
-        Assert.AreEqual(0, result.CrCount);
-        Assert.AreEqual(0, result.LfCount);
-        Assert.AreEqual(0, result.CrLfCount);
-        Assert.IsFalse(result.HasMixedEndLine);
-
-        Assert.AreEqual(1, result.LineWithTrailingWhitespaceCount);
-        Assert.AreEqual(1, result.TotalEmptyLineCount);
-        Assert.AreEqual(1, result.FinalEmptyLineCount);
-    }
-
-    [TestMethod]
-    public void AnalyzeStreamCharByChar_WithOneCr()
-    {
-        // Prepare
-
-        var analyser = new Analyser();
-
-        var reader = new StringReader("\r");
-
-        // Act
-
-        var result = analyser.AnalyzeStreamCharByChar(reader, file);
-
-        // Test
-
-        Assert.AreEqual(1, result.CharCount);
-        Assert.AreEqual(1, result.LineCount);
-
-        Assert.AreEqual(0, result.TotalSpaceCount);
-        Assert.AreEqual(0, result.DoubleSpaceCount);
-        Assert.AreEqual(0, result.TotalTabCount);
-        Assert.IsFalse(result.HasMixedSpaceAndTab);
-
-        Assert.AreEqual(1, result.CrCount);
-        Assert.AreEqual(0, result.LfCount);
-        Assert.AreEqual(0, result.CrLfCount);
-        Assert.IsFalse(result.HasMixedEndLine);
-
-        Assert.AreEqual(0, result.LineWithTrailingWhitespaceCount);
-        Assert.AreEqual(1, result.TotalEmptyLineCount);
-        Assert.AreEqual(1, result.FinalEmptyLineCount);
-    }
-
-    [TestMethod]
-    public void AnalyzeStreamCharByChar_WithOneLf()
-    {
-        // Prepare
-
-        var analyser = new Analyser();
-
-        var reader = new StringReader("\n");
-
-        // Act
-
-        var result = analyser.AnalyzeStreamCharByChar(reader, file);
-
-        // Test
-
-        Assert.AreEqual(1, result.CharCount);
-        Assert.AreEqual(1, result.LineCount);
-
-        Assert.AreEqual(0, result.TotalSpaceCount);
-        Assert.AreEqual(0, result.DoubleSpaceCount);
-        Assert.AreEqual(0, result.TotalTabCount);
-        Assert.IsFalse(result.HasMixedSpaceAndTab);
-
-        Assert.AreEqual(0, result.CrCount);
-        Assert.AreEqual(1, result.LfCount);
-        Assert.AreEqual(0, result.CrLfCount);
-        Assert.IsFalse(result.HasMixedEndLine);
-
-        Assert.AreEqual(0, result.LineWithTrailingWhitespaceCount);
-        Assert.AreEqual(1, result.TotalEmptyLineCount);
-        Assert.AreEqual(1, result.FinalEmptyLineCount);
-    }
-
-    [TestMethod]
-    public void AnalyzeStreamCharByChar_WithOneCrLf()
-    {
-        // Prepare
-
-        var analyser = new Analyser();
-
-        var reader = new StringReader("\r\n");
-
-        // Act
-
-        var result = analyser.AnalyzeStreamCharByChar(reader, file);
-
-        // Test
-
-        Assert.AreEqual(2, result.CharCount);
-        Assert.AreEqual(1, result.LineCount);
-
-        Assert.AreEqual(0, result.TotalSpaceCount);
-        Assert.AreEqual(0, result.DoubleSpaceCount);
-        Assert.AreEqual(0, result.TotalTabCount);
-        Assert.IsFalse(result.HasMixedSpaceAndTab);
-
-        Assert.AreEqual(0, result.CrCount);
-        Assert.AreEqual(0, result.LfCount);
-        Assert.AreEqual(1, result.CrLfCount);
-        Assert.IsFalse(result.HasMixedEndLine);
-
-        Assert.AreEqual(0, result.LineWithTrailingWhitespaceCount);
-        Assert.AreEqual(1, result.TotalEmptyLineCount);
-        Assert.AreEqual(1, result.FinalEmptyLineCount);
-    }
-
-    [TestMethod]
-    public void AnalyzeStreamCharByChar_WithTrailingWhitespaceAndEmptyLines()
-    {
-        // Prepare
-
-        var analyser = new Analyser();
-
-        var reader = new StringReader(" \ra\r\t\r");
-
-        // Act
-        var result = analyser.AnalyzeStreamCharByChar(reader, file);
-
-        // Test
-        Assert.AreEqual(6, result.CharCount);
-        Assert.AreEqual(3, result.LineCount);
-
-        Assert.AreEqual(1, result.TotalSpaceCount);
-        Assert.AreEqual(0, result.DoubleSpaceCount);
-        Assert.AreEqual(1, result.TotalTabCount);
-        Assert.IsFalse(result.HasMixedSpaceAndTab);
-
-        Assert.AreEqual(3, result.CrCount);
-        Assert.AreEqual(0, result.LfCount);
-        Assert.AreEqual(0, result.CrLfCount);
-        Assert.IsFalse(result.HasMixedEndLine);
-
-        Assert.AreEqual(2, result.LineWithTrailingWhitespaceCount);
-        Assert.AreEqual(2, result.TotalEmptyLineCount);
-        Assert.AreEqual(1, result.FinalEmptyLineCount);
-    }
-
-    [TestMethod]
-    public void AnalyzeStreamCharByChar_WithMixedSpaceAndTab()
-    {
-        // Prepare
-
-        var analyser = new Analyser();
-
-        var reader = new StringReader("\t a\r");
-
-        // Act
-
-        var result = analyser.AnalyzeStreamCharByChar(reader, file);
-
-        // Test
-
-        Assert.AreEqual(4, result.CharCount);
-        Assert.AreEqual(1, result.LineCount);
-
-        Assert.AreEqual(1, result.TotalSpaceCount);
-        Assert.AreEqual(0, result.DoubleSpaceCount);
-        Assert.AreEqual(1, result.TotalTabCount);
-        Assert.IsTrue(result.HasMixedSpaceAndTab);
-
-        Assert.AreEqual(1, result.CrCount);
-        Assert.AreEqual(0, result.LfCount);
-        Assert.AreEqual(0, result.CrLfCount);
-        Assert.IsFalse(result.HasMixedEndLine);
-
-        Assert.AreEqual(0, result.LineWithTrailingWhitespaceCount);
-        Assert.AreEqual(0, result.TotalEmptyLineCount);
-        Assert.AreEqual(0, result.FinalEmptyLineCount);
-    }
-
-    [TestMethod]
-    public void AnalyzeStreamCharByChar_WithMixedEndLine()
-    {
-        // Prepare
-
-        var analyser = new Analyser();
-
-        var reader = new StringReader("\n\r");
-
-        // Act
-
-        var result = analyser.AnalyzeStreamCharByChar(reader, file);
-
-        // Test
-
-        Assert.AreEqual(2, result.CharCount);
-        Assert.AreEqual(2, result.LineCount);
-
-        Assert.AreEqual(0, result.TotalSpaceCount);
-        Assert.AreEqual(0, result.DoubleSpaceCount);
-        Assert.AreEqual(0, result.TotalTabCount);
-        Assert.IsFalse(result.HasMixedSpaceAndTab);
-
-        Assert.AreEqual(1, result.CrCount);
-        Assert.AreEqual(1, result.LfCount);
-        Assert.AreEqual(0, result.CrLfCount);
-        Assert.IsTrue(result.HasMixedEndLine);
-
-        Assert.AreEqual(0, result.LineWithTrailingWhitespaceCount);
-        Assert.AreEqual(2, result.TotalEmptyLineCount);
-        Assert.AreEqual(2, result.FinalEmptyLineCount);
-    }
-
-    /*
-    [TestMethod]
-    public void AnalyzeStreamCharByChar_With()
-    {
-        // Prepare
-
-        var analyser = new Analyser();
-
-        var reader = new StringReader("");
-
-        // Act
-        var result = analyser.AnalyzeStreamCharByChar(reader, file);
-
-        // Test
-        Assert.AreEqual(0, result.CharCount);
-        Assert.AreEqual(0, result.LineCount);
-
-        Assert.AreEqual(0, result.TotalSpaceCount);
-        Assert.AreEqual(0, result.DoubleSpaceCount);
-        Assert.AreEqual(0, result.TotalTabCount);
-        Assert.IsFalse(result.HasMixedSpaceAndTab);
-
-        Assert.AreEqual(0, result.CrCount);
-        Assert.AreEqual(0, result.LfCount);
-        Assert.AreEqual(0, result.CrLfCount);
-        Assert.IsFalse(result.HasMixedEndLine);
-
-        Assert.AreEqual(0, result.LineWithTrailingWhitespaceCount);
-        Assert.AreEqual(0, result.TotalEmptyLineCount);
-        Assert.AreEqual(0, result.FinalEmptyLineCount);
-    }
-    */
 }
