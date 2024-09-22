@@ -1,19 +1,18 @@
 ﻿using Newtonsoft.Json.Linq;
 
-namespace TextFileAnalyser
+namespace TextFileAnalyser;
+
+internal class JsonHelper
 {
-    internal class JsonHelper
+    public static JObject CreateEmptyJson()
     {
-        public static JObject CreateEmptyJson()
-        {
-            return [];
-        }
+        return [];
+    }
 
-        public static void AddEntryToJson(ref JObject jsonObject, string key, string value)
-        {
-            ArgumentNullException.ThrowIfNull(jsonObject);
+    public static void AddEntryToJson(ref JObject jsonObject, string key, string value)
+    {
+        ArgumentNullException.ThrowIfNull(jsonObject);
 
-            jsonObject[key] = value;
-        }
+        jsonObject[key] = value;
     }
 }
