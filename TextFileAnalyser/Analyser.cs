@@ -179,19 +179,27 @@ public class Analyser
             charCount++;
             Window.AddChar((char)charRead);
 
-            // Comptage des espaces
-            if (Window.GetChar() == ' ')
+            // Comptage des caractères blancs
+            if (Char.IsWhiteSpace(Window.GetChar()))
             {
-                totalSpaceCount++;
-                if (Window.GetChar(1) == ' ') // TODO : Ça marche pas ça. Il faut corriger.
+                // Comptage des espaces
+                if (Window.GetChar() == ' ')
                 {
-                    doubleSpaceCount++;
+                    totalSpaceCount++;
+                    if (Window.GetChar(1) == ' ') // TODO : Ça marche pas ça. Il faut corriger.
+                    {
+                        doubleSpaceCount++;
+                    }
                 }
-            }
-            // Comptage des tabulations
-            else if (Window.GetChar() == '\t')
-            {
-                totalTabCount++;
+                // Comptage des tabulations
+                else if (Window.GetChar() == '\t')
+                {
+                    totalTabCount++;
+                }
+                else
+                {
+                    // TODO : Compter le nombre de caractères blancs autres ?
+                }
             }
             // Comptage des retour à la ligne (Carriage Return (CR))
             else if (Window.GetChar() == '\r')
