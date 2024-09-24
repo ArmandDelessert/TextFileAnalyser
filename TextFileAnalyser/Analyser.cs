@@ -252,6 +252,7 @@ public class Analyser
             // Autre caractère
             else
             {
+                // TODO : Compter le nombre d'autres caractères non-blancs ?
                 lineEmpty = false;
             }
 
@@ -264,6 +265,9 @@ public class Analyser
                 }
             }
         }
+
+        // TODO : En sortie de boucle, il suffit de vérifier l'état de 'lineEmpty'.
+        // S'il est vrai, il faut ajouter une ligne vide finale au compteur.
 
         // Si le dernier caractère n'est pas un retour à la ligne, il faut compter la dernière ligne comme une ligne en plus.
         if (charCount > 0 && (Window.GetChar() != '\r' && Window.GetChar() != '\n'))
