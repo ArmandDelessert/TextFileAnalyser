@@ -6,26 +6,38 @@ public class AnalyserTest
     private readonly File file = new();
 
     [DataTestMethod]
-    [DataRow("", 0, 0, 0, 0, 0, false, 0, 0, 0, false, 0, 0, 0)]
-    [DataRow(" ", 1, 1, 1, 0, 0, false, 0, 0, 0, false, 1, 1, 1)]
-    [DataRow("\t", 1, 1, 0, 0, 1, false, 0, 0, 0, false, 1, 1, 1)]
-    [DataRow("\r", 1, 1, 0, 0, 0, false, 1, 0, 0, false, 0, 1, 1)]
-    [DataRow("\n", 1, 1, 0, 0, 0, false, 0, 1, 0, false, 0, 1, 1)]
-    [DataRow("\r\n", 2, 1, 0, 0, 0, false, 0, 0, 1, false, 0, 1, 1)]
-    [DataRow("a\r", 2, 1, 0, 0, 0, false, 1, 0, 0, false, 0, 1, 1)] // TODO : Il y a une dernière ligne vide ou pas là ?
-    [DataRow("a\n", 2, 1, 0, 0, 0, false, 0, 1, 0, false, 0, 1, 1)] // TODO : Il y a une dernière ligne vide ou pas là ?
-    [DataRow("a\r\n", 3, 1, 0, 0, 0, false, 0, 0, 1, false, 0, 1, 1)] // TODO : Il y a une dernière ligne vide ou pas là ?
-    [DataRow(" \ra\r\t\r", 6, 3, 1, 0, 1, false, 3, 0, 0, false, 2, 2, 1)]
-    [DataRow("\t a\r", 4, 1, 1, 0, 1, true, 1, 0, 0, false, 0, 0, 0)] // TODO : Corriger `HasMixedSpaceAndTab`.
-    [DataRow("\n\r", 2, 2, 0, 0, 0, false, 1, 1, 0, true, 0, 2, 2)]
-    [DataRow(" \r", 2, 1, 1, 0, 0, false, 1, 0, 0, false, 1, 1, 1)]
-    [DataRow(" \n", 2, 1, 1, 0, 0, false, 0, 1, 0, false, 1, 1, 1)]
-    [DataRow(" \r\n", 3, 1, 1, 0, 0, false, 0, 0, 1, false, 1, 1, 1)]
-    [DataRow("\t\r", 2, 1, 0, 0, 1, false, 1, 0, 0, false, 1, 1, 1)]
-    [DataRow("\t\n", 2, 1, 0, 0, 1, false, 0, 1, 0, false, 1, 1, 1)]
-    [DataRow("\t\r\n", 3, 1, 0, 0, 1, false, 0, 0, 1, false, 1, 1, 1)]
-    [DataRow("ABCDEFGHIJKLMNOPQRSTUVWXYZ\r\nabcdefghijklmnopqrstuvwxyz\r\n0123456789\r\n", 68, 3, 0, 0, 0, false, 0, 0, 3, false, 0, 0, 0)]
-    public void AnalyzeStreamCharByChar_TestCases(
+    [DataRow("",            0, 0, 0, 0, 0, false, 0, 0, 0, false, 0, 0, 0)]
+    [DataRow(" ",           1, 1, 1, 0, 0, false, 0, 0, 0, false, 1, 1, 1)]
+    [DataRow("\t",          1, 1, 0, 0, 1, false, 0, 0, 0, false, 1, 1, 1)]
+    [DataRow("\r",          1, 2, 0, 0, 0, false, 1, 0, 0, false, 0, 2, 2)]
+    [DataRow("\n",          1, 2, 0, 0, 0, false, 0, 1, 0, false, 0, 2, 2)]
+    [DataRow("\r\n",        2, 2, 0, 0, 0, false, 0, 0, 1, false, 0, 2, 2)]
+
+    [DataRow("a",           1, 1, 0, 0, 0, false, 0, 0, 0, false, 0, 0, 0)]
+    [DataRow("a\r",         2, 2, 0, 0, 0, false, 1, 0, 0, false, 0, 1, 1)]
+    [DataRow("a\n",         2, 2, 0, 0, 0, false, 0, 1, 0, false, 0, 1, 1)]
+    [DataRow("a\r\n",       3, 2, 0, 0, 0, false, 0, 0, 1, false, 0, 1, 1)]
+    [DataRow("a ",          2, 1, 1, 0, 0, false, 0, 0, 0, false, 1, 0, 0)]
+    [DataRow("a \r",        3, 2, 1, 0, 0, false, 1, 0, 0, false, 1, 1, 1)]
+    [DataRow("a \n",        3, 2, 1, 0, 0, false, 0, 1, 0, false, 1, 1, 1)]
+    [DataRow("a \r\n",      4, 2, 1, 0, 0, false, 0, 0, 1, false, 1, 1, 1)]
+    [DataRow("a ",          2, 1, 1, 0, 0, false, 0, 0, 0, false, 1, 0, 0)]
+    [DataRow("a\t\r",       3, 2, 0, 0, 1, false, 1, 0, 0, false, 1, 1, 1)]
+    [DataRow("a\t\n",       3, 2, 0, 0, 1, false, 0, 1, 0, false, 1, 1, 1)]
+    [DataRow("a\t\r\n",     4, 2, 0, 0, 1, false, 0, 0, 1, false, 1, 1, 1)]
+
+    [DataRow(" \ra\r\t\r",  6, 4, 1, 0, 1, false, 3, 0, 0, false, 2, 3, 2)]
+    [DataRow("\t a\r",      4, 2, 1, 0, 1, true,  1, 0, 0, false, 0, 2, 1)] // TODO : Corriger `HasMixedSpaceAndTab`.
+    [DataRow("\n\r",        2, 3, 0, 0, 0, false, 1, 1, 0, true,  0, 3, 3)]
+    [DataRow(" \r",         2, 2, 1, 0, 0, false, 1, 0, 0, false, 1, 2, 2)]
+    [DataRow(" \n",         2, 2, 1, 0, 0, false, 0, 1, 0, false, 1, 2, 2)]
+    [DataRow(" \r\n",       3, 2, 1, 0, 0, false, 0, 0, 1, false, 1, 2, 2)]
+    [DataRow("\t\r",        2, 2, 0, 0, 1, false, 1, 0, 0, false, 1, 2, 2)]
+    [DataRow("\t\n",        2, 2, 0, 0, 1, false, 0, 1, 0, false, 1, 2, 2)]
+    [DataRow("\t\r\n",      3, 2, 0, 0, 1, false, 0, 0, 1, false, 1, 2, 2)]
+
+    [DataRow("ABCDEFGHIJKLMNOPQRSTUVWXYZ\r\nabcdefghijklmnopqrstuvwxyz\r\n0123456789\r\n", 68, 4, 0, 0, 0, false, 0, 0, 3, false, 0, 1, 1)]
+    public void AnalyzeStreamCharByCharTest(
     string input,
     int expectedCharCount,
     int expectedLineCount,
@@ -52,21 +64,21 @@ public class AnalyserTest
 
         // Assertions
 
-        Assert.AreEqual(expectedCharCount, result.CharCount, "CharCount");
-        Assert.AreEqual(expectedLineCount, result.LineCount, "LineCount");
+        Assert.AreEqual(expectedCharCount, result.CharCount, "Wrong 'CharCount'.");
+        Assert.AreEqual(expectedLineCount, result.LineCount, "Wrong 'LineCount'.");
 
-        Assert.AreEqual(expectedTotalSpaceCount, result.TotalSpaceCount, "TotalSpaceCount");
-        Assert.AreEqual(expectedDoubleSpaceCount, result.DoubleSpaceCount, "DoubleSpaceCount");
-        Assert.AreEqual(expectedTotalTabCount, result.TotalTabCount, "TotalTabCount");
-        Assert.AreEqual(expectedHasMixedSpaceAndTab, result.HasMixedSpaceAndTab, "HasMixedSpaceAndTab");
+        Assert.AreEqual(expectedTotalSpaceCount, result.TotalSpaceCount, "Wrong 'TotalSpaceCount'.");
+        Assert.AreEqual(expectedDoubleSpaceCount, result.DoubleSpaceCount, "Wrong 'DoubleSpaceCount'.");
+        Assert.AreEqual(expectedTotalTabCount, result.TotalTabCount, "Wrong 'TotalTabCount'.");
+        Assert.AreEqual(expectedHasMixedSpaceAndTab, result.HasMixedSpaceAndTab, "Wrong 'HasMixedSpaceAndTab'.");
 
-        Assert.AreEqual(expectedCrCount, result.CrCount, "CrCount");
-        Assert.AreEqual(expectedLfCount, result.LfCount, "LfCount");
-        Assert.AreEqual(expectedCrLfCount, result.CrLfCount, "CrLfCount");
-        Assert.AreEqual(expectedHasMixedEndLine, result.HasMixedEndLine, "HasMixedEndLine");
+        Assert.AreEqual(expectedCrCount, result.CrCount, "Wrong 'CrCount'.");
+        Assert.AreEqual(expectedLfCount, result.LfCount, "Wrong 'LfCount'.");
+        Assert.AreEqual(expectedCrLfCount, result.CrLfCount, "Wrong 'CrLfCount'.");
+        Assert.AreEqual(expectedHasMixedEndLine, result.HasMixedEndLine, "Wrong 'HasMixedEndLine'.");
 
-        Assert.AreEqual(expectedLineWithTrailingWhitespaceCount, result.LineWithTrailingWhitespaceCount, "LineWithTrailingWhitespaceCount");
-        Assert.AreEqual(expectedTotalEmptyLineCount, result.TotalEmptyLineCount, "TotalEmptyLineCount");
-        Assert.AreEqual(expectedFinalEmptyLineCount, result.FinalEmptyLineCount, "FinalEmptyLineCount");
+        Assert.AreEqual(expectedLineWithTrailingWhitespaceCount, result.LineWithTrailingWhitespaceCount, "Wrong 'LineWithTrailingWhitespaceCount'.");
+        Assert.AreEqual(expectedTotalEmptyLineCount, result.TotalEmptyLineCount, "Wrong 'TotalEmptyLineCount'.");
+        Assert.AreEqual(expectedFinalEmptyLineCount, result.FinalEmptyLineCount, "Wrong 'FinalEmptyLineCount'.");
     }
 }
