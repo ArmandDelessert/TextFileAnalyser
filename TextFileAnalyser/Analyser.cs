@@ -196,58 +196,71 @@ public class Analyser
                 {
                     totalTabCount++;
                 }
+                // Comptage des retour à la ligne (Carriage Return (CR))
+                else if (Window.GetChar() == '\r')
+                {
+                    crCount++;
+                    lineCount++;
+
+                    // Vérification de la présence d'espaces blancs en fin de ligne.
+                    if (Char.IsWhiteSpace(Window.GetChar(1)))
+                    {
+                        lineWithTrailingWhitespaceCount++;
+                    }
+
+                    if (lineEmpty)
+                    {
+                        totalEmptyLineCount++;
+                        finalEmptyLineCount++;
+                    }
+                    else
+                    {
+                        finalEmptyLineCount = 0;
+                    }
+                    lineEmpty = true; // Réinistialisation de l'indicateur.
+                }
+                // Comptage des retours à la ligne (Line Feed (LF))
+                else if (Window.GetChar() == '\n')
+                {
+                    if (Window.GetChar(1) == '\r')
+                    {
+                        crlfCount++;
+                        crCount--; // Retire le CR précédent du comptage car il fait partie du CRLF.
+
+                        if (lineEmpty)
+                        {
+                            // TODO : Pourquoi ?
+                            totalEmptyLineCount--;
+                            finalEmptyLineCount--;
+                        }
+                    }
+                    else
+                    {
+                        lfCount++;
+                        lineCount++;
+
+                        // Vérification de la présence d'espaces blancs en fin de ligne.
+                        if (Char.IsWhiteSpace(Window.GetChar(1)))
+                        {
+                            lineWithTrailingWhitespaceCount++;
+                        }
+                    }
+
+                    if (lineEmpty)
+                    {
+                        totalEmptyLineCount++;
+                        finalEmptyLineCount++;
+                    }
+                    else
+                    {
+                        finalEmptyLineCount = 0;
+                    }
+                    lineEmpty = true; // Réinistialisation de l'indicateur.
+                }
                 else
                 {
                     // TODO : Compter le nombre de caractères blancs autres ?
                 }
-            }
-            // Comptage des retour à la ligne (Carriage Return (CR))
-            else if (Window.GetChar() == '\r')
-            {
-                crCount++;
-                lineCount++;
-                if (lineEmpty)
-                {
-                    totalEmptyLineCount++;
-                    finalEmptyLineCount++;
-                }
-                else
-                {
-                    finalEmptyLineCount = 0;
-                }
-                lineEmpty = true; // Réinistialisation de l'indicateur.
-            }
-            // Comptage des retours à la ligne (Line Feed (LF))
-            else if (Window.GetChar() == '\n')
-            {
-                if (Window.GetChar(1) == '\r')
-                {
-                    crlfCount++;
-                    crCount--; // Retire le CR précédent du comptage car il fait partie du CRLF.
-
-                    if (lineEmpty)
-                    {
-                        // TODO : Pourquoi ?
-                        totalEmptyLineCount--;
-                        finalEmptyLineCount--;
-                    }
-                }
-                else
-                {
-                    lfCount++;
-                    lineCount++;
-                }
-
-                if (lineEmpty)
-                {
-                    totalEmptyLineCount++;
-                    finalEmptyLineCount++;
-                }
-                else
-                {
-                    finalEmptyLineCount = 0;
-                }
-                lineEmpty = true; // Réinistialisation de l'indicateur.
             }
             // Autre caractère
             else
@@ -255,38 +268,38 @@ public class Analyser
                 // TODO : Compter le nombre d'autres caractères non-blancs ?
                 lineEmpty = false;
             }
-
-            // Vérification des espaces blancs en fin de ligne.
-            if (Window.GetChar() == '\r' || Window.GetChar() == '\n')
-            {
-                if (Window.GetChar(1) == ' ' || Window.GetChar(1) == '\t')
-                {
-                    lineWithTrailingWhitespaceCount++;
-                }
-            }
         }
 
-        // TODO : En sortie de boucle, il suffit de vérifier l'état de 'lineEmpty'.
-        // S'il est vrai, il faut ajouter une ligne vide finale au compteur.
-
-        // Si le dernier caractère n'est pas un retour à la ligne, il faut compter la dernière ligne comme une ligne en plus.
-        if (charCount > 0 && (Window.GetChar() != '\r' && Window.GetChar() != '\n'))
+        // Caractère blanc
+        if (Char.IsWhiteSpace(Window.GetChar()))
         {
-            lineCount++;
-
-            // Comptage de la dernière ligne si elle est vide.
-            if (lineEmpty)
+            // Retour à la ligne
+            if (Window.GetChar() == '\r' || Window.GetChar() == '\n')
             {
+                lineCount++;
                 totalEmptyLineCount++;
                 finalEmptyLineCount++;
             }
+            else
+            {
+                lineWithTrailingWhitespaceCount++;
+
+                if (lineEmpty)
+                {
+                    totalEmptyLineCount++;
+                    finalEmptyLineCount++;
+                }
+            }
+        }
+        // Autre caractère
+        else
+        {
+            finalEmptyLineCount = 0;
         }
 
-        // Vérification des espaces blancs en fin de fichier.
-        if (Window.GetChar(0) == ' ' || Window.GetChar(0) == '\t')
-        {
-            lineWithTrailingWhitespaceCount++;
-        }
+        // Le fichier comporte 1 ligne s'il n'est pas vide et qu'il ne comporte aucun retour à la ligne.
+        if (lineCount == 0 && charCount > 0)
+            lineCount++;
 
         file.CharCount = charCount;
         file.LineCount = lineCount;
