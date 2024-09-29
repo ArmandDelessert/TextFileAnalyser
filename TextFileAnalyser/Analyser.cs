@@ -203,7 +203,7 @@ public class Analyser
                     lineCount++;
 
                     // Vérification de la présence d'espaces blancs en fin de ligne.
-                    if (Char.IsWhiteSpace(Window.GetChar(1)))
+                    if (IsWhiteSpaceButNotNewLine(Window.GetChar(1)))
                     {
                         lineWithTrailingWhitespaceCount++;
                     }
@@ -240,7 +240,7 @@ public class Analyser
                         lineCount++;
 
                         // Vérification de la présence d'espaces blancs en fin de ligne.
-                        if (Char.IsWhiteSpace(Window.GetChar(1)))
+                        if (IsWhiteSpaceButNotNewLine(Window.GetChar(1)))
                         {
                             lineWithTrailingWhitespaceCount++;
                         }
@@ -274,7 +274,7 @@ public class Analyser
         if (Char.IsWhiteSpace(Window.GetChar()))
         {
             // Retour à la ligne
-            if (Window.GetChar() == '\r' || Window.GetChar() == '\n')
+            if (IsNewLine(Window.GetChar()))
             {
                 lineCount++;
                 totalEmptyLineCount++;
@@ -315,4 +315,10 @@ public class Analyser
 
         return file;
     }
+
+    private static bool IsNewLine(char c)
+        => c == '\r' || c == '\n';
+
+    private static bool IsWhiteSpaceButNotNewLine(char c)
+        => Char.IsWhiteSpace(c) && !IsNewLine(c);
 }
