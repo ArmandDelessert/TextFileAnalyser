@@ -180,24 +180,24 @@ public class Analyser
             Window.AddChar((char)charRead);
 
             // Comptage des caractères blancs
-            if (Char.IsWhiteSpace(Window.GetChar()))
+            if (IsWhiteSpace(Window.GetChar()))
             {
                 // Comptage des espaces
-                if (Window.GetChar() == ' ')
+                if (IsSpace(Window.GetChar()))
                 {
                     totalSpaceCount++;
-                    if (Window.GetChar(1) == ' ') // TODO : Ça marche pas ça. Il faut corriger.
+                    if (IsSpace(Window.GetChar(1))) // TODO : Ça marche pas ça. Il faut corriger.
                     {
                         doubleSpaceCount++;
                     }
                 }
                 // Comptage des tabulations
-                else if (Window.GetChar() == '\t')
+                else if (IsTab(Window.GetChar()))
                 {
                     totalTabCount++;
                 }
                 // Comptage des retour à la ligne (Carriage Return (CR))
-                else if (Window.GetChar() == '\r')
+                else if (IsCr(Window.GetChar()))
                 {
                     crCount++;
                     lineCount++;
@@ -220,16 +220,16 @@ public class Analyser
                     lineEmpty = true; // Réinistialisation de l'indicateur.
                 }
                 // Comptage des retours à la ligne (Line Feed (LF))
-                else if (Window.GetChar() == '\n')
+                else if (IsLf(Window.GetChar()))
                 {
-                    if (Window.GetChar(1) == '\r')
+                    if (IsCr(Window.GetChar(1)))
                     {
                         crlfCount++;
-                        crCount--; // Retire le CR précédent du comptage car il fait partie du CRLF.
+                        crCount--; // Retrait du CR précédent du comptage car il fait partie du CRLF.
 
                         if (lineEmpty)
                         {
-                            // TODO : Pourquoi ?
+                            // Diminution des compteurs car ils seront réincrémenté plus bas.
                             totalEmptyLineCount--;
                             finalEmptyLineCount--;
                         }
@@ -271,7 +271,7 @@ public class Analyser
         }
 
         // Caractère blanc
-        if (Char.IsWhiteSpace(Window.GetChar()))
+        if (IsWhiteSpace(Window.GetChar()))
         {
             // Retour à la ligne
             if (IsNewLine(Window.GetChar()))
@@ -316,9 +316,24 @@ public class Analyser
         return file;
     }
 
+    private static bool IsSpace(char c)
+        => c == ' ';
+
+    private static bool IsTab(char c)
+        => c == '\t';
+
+    private static bool IsCr(char c)
+        => c == '\r';
+
+    private static bool IsLf(char c)
+        => c == '\n';
+
     private static bool IsNewLine(char c)
-        => c == '\r' || c == '\n';
+        => IsCr(c) || IsLf(c);
+
+    private static bool IsWhiteSpace(char c)
+        => Char.IsWhiteSpace(c);
 
     private static bool IsWhiteSpaceButNotNewLine(char c)
-        => Char.IsWhiteSpace(c) && !IsNewLine(c);
+        => IsWhiteSpace(c) && !IsNewLine(c);
 }
