@@ -270,13 +270,16 @@ public class Analyser
             }
         }
 
+        // Ajout d'une ligne si le fichier n'est pas complètement vide.
+        if (charCount > 0)
+            lineCount++;
+
         // Caractère blanc
         if (IsWhiteSpace(Window.GetChar()))
         {
             // Retour à la ligne
             if (IsNewLine(Window.GetChar()))
             {
-                lineCount++;
                 totalEmptyLineCount++;
                 finalEmptyLineCount++;
             }
@@ -296,10 +299,6 @@ public class Analyser
         {
             finalEmptyLineCount = 0;
         }
-
-        // Le fichier comporte 1 ligne s'il n'est pas vide et qu'il ne comporte aucun retour à la ligne.
-        if (lineCount == 0 && charCount > 0)
-            lineCount++;
 
         file.CharCount = charCount;
         file.LineCount = lineCount;
