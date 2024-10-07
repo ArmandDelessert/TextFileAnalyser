@@ -118,12 +118,8 @@ public class AnalyserTest
         // Préparation
 
         Console.WriteLine("Test input:");
-        IEnumerable<string> detailledInput = input.Select(ConvertCharToString);
-        foreach (string c in detailledInput)
-        {
-            Console.Write($"{c} ");
-        }
-        Console.WriteLine();
+        DisplayChars(input.Select(ConvertCharToString1), " ", "", "");
+        DisplayChars(input.Select(ConvertCharToString2), "", "\"", "\"");
 
         var analyser = new Analyser();
         var reader = new StringReader(input);
@@ -152,7 +148,7 @@ public class AnalyserTest
         Assert.AreEqual(expectedFinalEmptyLineCount, result.FinalEmptyLineCount, "Wrong 'FinalEmptyLineCount'.");
     }
 
-    private static string ConvertCharToString(char c)
+    private static string ConvertCharToString1(char c)
     {
         return c switch
         {
@@ -162,5 +158,27 @@ public class AnalyserTest
             '\n' => "<LF>",
             _ => $"'{c}'",
         };
+    }
+
+    private static string ConvertCharToString2(char c)
+    {
+        return c switch
+        {
+            ' ' => " ",
+            '\t' => "\\t",
+            '\r' => "\\r",
+            '\n' => "\\n",
+            _ => $"{c}",
+        };
+    }
+
+    private static void DisplayChars(IEnumerable<string> chars, string separator, string startDelimiter, string endDelimiter)
+    {
+        Console.Write(startDelimiter);
+        foreach (string c in chars)
+        {
+            Console.Write($"{c}{separator}");
+        }
+        Console.WriteLine(endDelimiter);
     }
 }
