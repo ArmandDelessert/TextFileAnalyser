@@ -267,6 +267,7 @@ public class Analyser
             {
                 // TODO : Compter le nombre d'autres caractères non-blancs ?
                 lineEmpty = false;
+                finalEmptyLineCount = 0;
             }
         }
 
