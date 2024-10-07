@@ -52,13 +52,13 @@ public class AnalyserTest
     [DataRow(" \r\t\nA", 5, 3, 1, 0, 1, false, 1, 1, 0, true,  2, 2, 0)]
     [DataRow(" \r\tA\n", 5, 3, 1, 0, 1, false, 1, 1, 0, true,  1, 2, 1)]
     [DataRow(" \r\n\tA", 5, 2, 1, 0, 1, false, 0, 0, 1, false, 1, 1, 0)]
-    [DataRow(" \r\nA\t", 5, 2, 1, 0, 1, false, 0, 0, 1, false, 2, 1, 0)] // TODO : Corriger `FinalEmptyLineCount`.
+    [DataRow(" \r\nA\t", 5, 2, 1, 0, 1, false, 0, 0, 1, false, 2, 1, 0)]
     [DataRow(" \rA\t\n", 5, 3, 1, 0, 1, false, 1, 1, 0, true,  2, 2, 1)]
     [DataRow(" \rA\n\t", 5, 3, 1, 0, 1, false, 1, 1, 0, true,  2, 2, 1)]
     [DataRow(" \n\t\rA", 5, 3, 1, 0, 1, false, 1, 1, 0, true,  2, 2, 0)]
     [DataRow(" \n\tA\r", 5, 3, 1, 0, 1, false, 1, 1, 0, true,  1, 2, 1)]
     [DataRow(" \n\r\tA", 5, 3, 1, 0, 1, false, 1, 1, 0, true,  1, 2, 0)]
-    [DataRow(" \n\rA\t", 5, 3, 1, 0, 1, false, 1, 1, 0, true,  2, 2, 0)] // TODO : Corriger `FinalEmptyLineCount`.
+    [DataRow(" \n\rA\t", 5, 3, 1, 0, 1, false, 1, 1, 0, true,  2, 2, 0)]
     [DataRow(" \nA\t\r", 5, 3, 1, 0, 1, false, 1, 1, 0, true,  2, 2, 1)]
     [DataRow(" \nA\r\t", 5, 3, 1, 0, 1, false, 1, 1, 0, true,  2, 2, 1)]
     [DataRow(" A\t\r\n", 5, 2, 1, 0, 1, false, 0, 0, 1, false, 1, 1, 1)]
@@ -77,13 +77,13 @@ public class AnalyserTest
     [DataRow("\t\r \nA", 5, 3, 1, 0, 1, false, 1, 1, 0, true,  2, 2, 0)]
     [DataRow("\t\r A\n", 5, 3, 1, 0, 1, false, 1, 1, 0, true,  1, 2, 1)]
     [DataRow("\t\r\n A", 5, 2, 1, 0, 1, false, 0, 0, 1, false, 1, 1, 0)]
-    [DataRow("\t\r\nA ", 5, 2, 1, 0, 1, false, 0, 0, 1, false, 2, 1, 0)] // TODO : Corriger `FinalEmptyLineCount`.
+    [DataRow("\t\r\nA ", 5, 2, 1, 0, 1, false, 0, 0, 1, false, 2, 1, 0)]
     [DataRow("\t\rA \n", 5, 3, 1, 0, 1, false, 1, 1, 0, true,  2, 2, 1)]
     [DataRow("\t\rA\n ", 5, 3, 1, 0, 1, false, 1, 1, 0, true,  2, 2, 1)]
     [DataRow("\t\n \rA", 5, 3, 1, 0, 1, false, 1, 1, 0, true,  2, 2, 0)]
     [DataRow("\t\n A\r", 5, 3, 1, 0, 1, false, 1, 1, 0, true,  1, 2, 1)]
     [DataRow("\t\n\r A", 5, 3, 1, 0, 1, false, 1, 1, 0, true,  1, 2, 0)]
-    [DataRow("\t\n\rA ", 5, 3, 1, 0, 1, false, 1, 1, 0, true,  2, 2, 0)] // TODO : Corriger `FinalEmptyLineCount`.
+    [DataRow("\t\n\rA ", 5, 3, 1, 0, 1, false, 1, 1, 0, true,  2, 2, 0)]
     [DataRow("\t\nA \r", 5, 3, 1, 0, 1, false, 1, 1, 0, true,  2, 2, 1)]
     [DataRow("\t\nA\r ", 5, 3, 1, 0, 1, false, 1, 1, 0, true,  2, 2, 1)]
     [DataRow("\tA \r\n", 5, 2, 1, 0, 1, false, 0, 0, 1, false, 1, 1, 1)]
