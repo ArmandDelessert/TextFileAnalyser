@@ -14,6 +14,15 @@ public class AnalyserTest
     [DataRow("\n",   1, 2, 0, 0, 0, false, 0, 1, 0, false, 0, 2, 2)]
     [DataRow("\r\n", 2, 2, 0, 0, 0, false, 0, 0, 1, false, 0, 2, 2)]
 
+    [DataRow("\n\r", 2, 3, 0, 0, 0, false, 1, 1, 0, true, 0, 3, 3)]
+
+    [DataRow(" \r",    2, 2, 1, 0, 0, false, 1, 0, 0, false, 1, 2, 2)]
+    [DataRow(" \n",    2, 2, 1, 0, 0, false, 0, 1, 0, false, 1, 2, 2)]
+    [DataRow(" \r\n",  3, 2, 1, 0, 0, false, 0, 0, 1, false, 1, 2, 2)]
+    [DataRow("\t\r",   2, 2, 0, 0, 1, false, 1, 0, 0, false, 1, 2, 2)]
+    [DataRow("\t\n",   2, 2, 0, 0, 1, false, 0, 1, 0, false, 1, 2, 2)]
+    [DataRow("\t\r\n", 3, 2, 0, 0, 1, false, 0, 0, 1, false, 1, 2, 2)]
+
     [DataRow("a",     1, 1, 0, 0, 0, false, 0, 0, 0, false, 0, 0, 0)]
     [DataRow("a\r",   2, 2, 0, 0, 0, false, 1, 0, 0, false, 0, 1, 1)]
     [DataRow("a\n",   2, 2, 0, 0, 0, false, 0, 1, 0, false, 0, 1, 1)]
@@ -28,20 +37,11 @@ public class AnalyserTest
     [DataRow("a\t\n",   3, 2, 0, 0, 1, false, 0, 1, 0, false, 1, 1, 1)]
     [DataRow("a\t\r\n", 4, 2, 0, 0, 1, false, 0, 0, 1, false, 1, 1, 1)]
 
-    [DataRow("\n\r", 2, 3, 0, 0, 0, false, 1, 1, 0, true,  0, 3, 3)]
-
-    [DataRow(" \r",    2, 2, 1, 0, 0, false, 1, 0, 0, false, 1, 2, 2)]
-    [DataRow(" \n",    2, 2, 1, 0, 0, false, 0, 1, 0, false, 1, 2, 2)]
-    [DataRow(" \r\n",  3, 2, 1, 0, 0, false, 0, 0, 1, false, 1, 2, 2)]
-    [DataRow("\t\r",   2, 2, 0, 0, 1, false, 1, 0, 0, false, 1, 2, 2)]
-    [DataRow("\t\n",   2, 2, 0, 0, 1, false, 0, 1, 0, false, 1, 2, 2)]
-    [DataRow("\t\r\n", 3, 2, 0, 0, 1, false, 0, 0, 1, false, 1, 2, 2)]
-
     [DataRow(" \ra\r\t\r", 6, 4, 1, 0, 1, false, 3, 0, 0, false, 2, 3, 2)]
     //[DataRow("\t a\r",     4, 2, 1, 0, 1, true,  1, 0, 0, false, 0, 2, 1)] // TODO : Corriger `HasMixedSpaceAndTab`.
-
-    [DataRow("{\r  a\r}\r", 8, 4, 2, 1, 0, false, 3, 0, 0, false, 0, 1, 1)]
-    [DataRow("{\r\ta\r}\r", 7, 4, 0, 0, 1, false, 3, 0, 0, false, 0, 1, 1)]
+    [DataRow("a \ra \ra \ra \ra \ra ", 17, 6, 6, 0, 0, false, 5, 0, 0, false, 6, 0, 0)]
+    [DataRow("a \ra \ra \ra \ra \ra \r", 18, 7, 6, 0, 0, false, 6, 0, 0, false, 6, 1, 1)]
+    [DataRow("a \ra \ra \ra \ra \ra \r ", 19, 7, 7, 0, 0, false, 6, 0, 0, false, 7, 1, 1)]
 
     [DataRow(" \t\r\nA", 5, 2, 1, 0, 1, false, 0, 0, 1, false, 1, 1, 0)]
     [DataRow(" \t\rA\n", 5, 3, 1, 0, 1, false, 1, 1, 0, true, 1, 2, 1)]
@@ -167,6 +167,9 @@ public class AnalyserTest
     [DataRow("A\n\t\r ", 5, 3, 1, 0, 1, false, 1, 1, 0, true, 2, 2, 2)]
     [DataRow("A\n\r \t", 5, 3, 1, 0, 1, false, 1, 1, 0, true, 1, 2, 2)]
     [DataRow("A\n\r\t ", 5, 3, 1, 0, 1, false, 1, 1, 0, true, 1, 2, 2)]
+
+    [DataRow("{\r  a\r}\r", 8, 4, 2, 1, 0, false, 3, 0, 0, false, 0, 1, 1)]
+    [DataRow("{\r\ta\r}\r", 7, 4, 0, 0, 1, false, 3, 0, 0, false, 0, 1, 1)]
 
     [DataRow("ABCDEFGHIJKLMNOPQRSTUVWXYZ\r\nabcdefghijklmnopqrstuvwxyz\r\n0123456789\r\n",
         68, 4, 0, 0, 0, false, 0, 0, 3, false, 0, 1, 1)]
